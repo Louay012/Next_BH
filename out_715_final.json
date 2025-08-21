@@ -1,0 +1,136 @@
+{
+  "REF_PERSONNE": "715",
+  "client_info": {
+    "REF_PERSONNE": "715",
+    "NOM_PRENOM": "Personne_00001",
+    "DATE_NAISSANCE": "1964-09-28 00:00:00",
+    "LIEU_NAISSANCE": null,
+    "CODE_SEXE": "M",
+    "SITUATION_FAMILIALE": "Marie",
+    "NUM_PIECE_IDENTITE": 10000001,
+    "LIB_SECTEUR_ACTIVITE": "CADRES ET PROFESSIONS INTELLECTUELLES SUPÉRIEURES",
+    "LIB_PROFESSION": "MÉDECINS LIBÉRAUX GÉNÉRALISTES",
+    "VILLE": "",
+    "LIB_GOUVERNORAT": null,
+    "VILLE_GOUVERNORAT": " - ",
+    "type_client": "physique",
+    "AGE": 60,
+    "TRANCHE_AGE": "Senior",
+    "SEXE": "M",
+    "CLIENT_SCORE": 1,
+    "SCORE_REASONS": [
+      "Peu de sinistres: +1",
+      "Paiements partiels: +1",
+      "Manque de diversification: -1"
+    ],
+    "CLIENT_SEGMENT": "Standard",
+    "BEHAVIORS": [],
+    "RISK_PROFILE": {
+      "high_capital": false,
+      "frequent_sinistres": false,
+      "unpaid_premiums": 4101.9655
+    }
+  },
+  "contrats_en_cours": [
+    {
+      "NUM_CONTRAT": "2000300000063",
+      "LIB_PRODUIT": "AUTOMOBILE",
+      "LIB_BRANCHE": "AUTOMOBILE",
+      "LIB_SOUS_BRANCHE": "AUTOMOBILE",
+      "EFFET_CONTRAT": "2000-02-25T00:00:00",
+      "DATE_EXPIRATION": null,
+      "PROCHAIN_TERME": "2001-02-25 00:00:00.000",
+      "LIB_ETAT_CONTRAT": "RESILIE",
+      "somme_quittances": 167.451,
+      "statut_paiement": "Payé",
+      "Capital_assure": 9000.0
+    },
+    {
+      "NUM_CONTRAT": "2000300000030",
+      "LIB_PRODUIT": "AUTOMOBILE",
+      "LIB_BRANCHE": "AUTOMOBILE",
+      "LIB_SOUS_BRANCHE": "AUTOMOBILE",
+      "EFFET_CONTRAT": "2000-01-20T00:00:00",
+      "DATE_EXPIRATION": null,
+      "PROCHAIN_TERME": "2002-07-20 00:00:00.000",
+      "LIB_ETAT_CONTRAT": "RESILIE",
+      "somme_quittances": 998.634,
+      "statut_paiement": "Non payé",
+      "Capital_assure": 30000.0
+    },
+    {
+      "NUM_CONTRAT": "2010301000153",
+      "LIB_PRODUIT": "AUTOMOBILE",
+      "LIB_BRANCHE": "AUTOMOBILE",
+      "LIB_SOUS_BRANCHE": "AUTOMOBILE",
+      "EFFET_CONTRAT": "2010-04-28T00:00:00",
+      "DATE_EXPIRATION": null,
+      "PROCHAIN_TERME": "2013-04-28 00:00:00.000",
+      "LIB_ETAT_CONTRAT": "RESILIE",
+      "somme_quittances": 3103.3315,
+      "statut_paiement": "Non payé",
+      "Capital_assure": 22750.0
+    },
+    {
+      "NUM_CONTRAT": "2012301004689",
+      "LIB_PRODUIT": "AUTOMOBILE",
+      "LIB_BRANCHE": "AUTOMOBILE",
+      "LIB_SOUS_BRANCHE": "AUTOMOBILE",
+      "EFFET_CONTRAT": "2012-04-29T00:00:00",
+      "DATE_EXPIRATION": null,
+      "PROCHAIN_TERME": "2013-04-29 00:00:00.000",
+      "LIB_ETAT_CONTRAT": "RESILIE",
+      "somme_quittances": 410.1,
+      "statut_paiement": "Payé",
+      "Capital_assure": 22000.0
+    }
+  ],
+  "contrats_expired": [],
+  "sinistres": [
+    {
+      "NUM_CONTRAT": "2000300000030",
+      "sinistres": [
+        {
+          "NUM_SINISTRE": 20023000068,
+          "NATURE_SINISTRE": "MATERIEL",
+          "LIB_TYPE_SINISTRE": "DEFENSE IDA",
+          "TAUX_RESPONSABILITE": 100.0,
+          "DATE_SURVENANCE": "2002-02-01T00:00:00",
+          "DATE_DECLARATION": "2002-02-04T00:00:00",
+          "DATE_OUVERTURE": "2002-02-04T00:00:00",
+          "LIB_ETAT_SINISTRE": "CLOTURE",
+          "MONTANT_ENCAISSE": 0.0,
+          "MONTANT_A_ENCAISSER": 2037.343,
+          "OBSERVATION_SINISTRE": null,
+          "LIEU_ACCIDENT": "LA BARDO"
+        }
+      ]
+    }
+  ],
+  "total_capital_assure": 83750.0,
+  "nb_contrats_actifs": 4,
+  "nb_contrats_total": 4,
+  "opportunities": [
+    {
+      "rule": "manque_sante",
+      "recommendation": [
+        "ASSURANCE SANTE"
+      ],
+      "reason": "Pas de produit SANTE détecté"
+    },
+    {
+      "rule": "manque_vie",
+      "recommendation": [
+        "ASSURANCE VIE"
+      ],
+      "reason": "Pas de produit VIE détecté pour profil adulte"
+    }
+  ],
+  "summary_text": "Client REF_PERSONNE=715, type=physique, nom=Personne_00001\nAge: 60 (Senior)\nProfession: MÉDECINS LIBÉRAUX GÉNÉRALISTES\nSecteur: CADRES ET PROFESSIONS INTELLECTUELLES SUPÉRIEURES\nVille: Non renseigné\nNb contrats actifs: 4, total contrats: 4, capital_total: 83750.00\nScore Client: 1 (Raisons: Peu de sinistres: +1, Paiements partiels: +1, Manque de diversification: -1)\nSegment Client: Standard\nProfil de risque: Capital élevé=False, Sinistres fréquents=False, Impayés=4101.97\nContrats en cours:\n- 2000300000063 | AUTOMOBILE | branche=AUTOMOBILE | capital=9000.0 | paiement=Payé\n- 2000300000030 | AUTOMOBILE | branche=AUTOMOBILE | capital=30000.0 | paiement=Non payé\n- 2010301000153 | AUTOMOBILE | branche=AUTOMOBILE | capital=22750.0 | paiement=Non payé\n- 2012301004689 | AUTOMOBILE | branche=AUTOMOBILE | capital=22000.0 | paiement=Payé\nSinistres:\n- Contrat 2000300000030: 1 sinistres (ex: montants: [2037.343])\nOpportunités détectées:\n- Pas de produit SANTE détecté -> ASSURANCE SANTE\n- Pas de produit VIE détecté pour profil adulte -> ASSURANCE VIE\nGraphiques générés:\n- contracts_by_type: c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\contracts_by_type_715.png\n- payment_status: c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\payment_status_715.png\n- capital_trend: c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\capital_trend_715.png\n- sinistres_per_year: c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\sinistres_per_year_715.png",
+  "charts": {
+    "contracts_by_type": "c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\contracts_by_type_715.png",
+    "payment_status": "c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\payment_status_715.png",
+    "capital_trend": "c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\capital_trend_715.png",
+    "sinistres_per_year": "c:\\Users\\louay\\OneDrive\\Desktop\\NEXT_BH\\backend\\tools\\../../charts\\sinistres_per_year_715.png"
+  }
+}
