@@ -1,0 +1,25 @@
+/* style.css */
+.prose {
+    line-height: 1.6;
+}
+
+.prose br {
+    margin-bottom: 0.75em;
+    display: block;
+    content: "";
+}
+
+#scoreChart {
+    width: 100%;
+    height: 100%;
+}
+
+/* Animation pour le chargement */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}

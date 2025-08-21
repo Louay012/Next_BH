@@ -40,19 +40,31 @@ const Chatbot = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
 
+    const payload = {
+      client_ref: "9086",  // ⚠️ tu peux le passer dynamiquement si besoin
+      message: input,
+      history : []
+    };
+
     try {
       setIsLoading(true);
       // Simulate API call (replace with actual API endpoint)
       await new Promise(resolve => setTimeout(resolve, 800));
       
       const response = await axios.post(
-        `http://localhost:5000/chat`, 
-        { message: input }
+        `http://127.0.0.1:8000/chat`, 
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
       );
       
       const botMessage = { 
         sender: 'bot', 
-        text: response?.data?.message || "Je n'ai pas pu traiter votre demande. Veuillez réessayer.",
+        text: response?.data?.response || "Je n'ai pas pu traiter votre demande. Veuillez réessayer.",
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, botMessage]);
