@@ -1,0 +1,31 @@
+import smtplib
+from email.mime.text import MIMEText
+
+# === Local variables (you change these for each email) ===
+sender_email = "yahyabenahmed522@gmail.com"         # your Gmail address
+sender_password = "pygq wnzv tuta lswk"    # from Google App Passwords
+to_email = "ahmedhajali78@gmail.com"               # client’s email
+subject = "Votre offre personnalisée BH Assurance"
+body = """Cher Client,
+
+Suite à l’analyse de votre profil, nous avons identifié des couvertures complémentaires adaptées à vos besoins.
+- Assurance Vie
+- Complémentaire Santé
+- Responsabilité Professionnelle
+
+Cordialement,
+BH Assurance
+"""
+
+# === Create the message ===
+msg = MIMEText(body)
+msg["Subject"] = subject
+msg["From"] = sender_email
+msg["To"] = to_email
+
+# === Connect to Gmail SMTP server and send ===
+with smtplib.SMTP("smtp.gmail.com", 587) as server:
+    server.starttls()                        # secure connection
+    server.login(sender_email, sender_password)
+    server.sendmail(sender_email, to_email, msg.as_string())
+    print(f"✅ Email sent to {to_email}")
