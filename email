@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 # === Local variables (you change these for each email) ===
 sender_email = "yahyabenahmed522@gmail.com"         # your Gmail address
 sender_password = "pygq wnzv tuta lswk"    # from Google App Passwords
-to_email = "ahmedhajali78@gmail.com"               # client’s email
+to_email = "fezaimohamedelamine@gmail.com"               # client’s email
 subject = "Votre offre personnalisée BH Assurance"
 body = """Cher Client,
 
