@@ -8,12 +8,12 @@ import {
 
 // ...existing code...
 const COLORS = [
-  "#1C398E",  // Deep Blue (Primary brand color)
-  "#9F0712",  // Deep Red (Secondary brand color)
-  "#62748E",  // Steel Blue
-  "#2C3E50",  // Dark Blue Grey
-  "#34495E",  // Blue Grey
-  "#516A8B"   // Muted Blue
+  "#1C398E",  // Bleu profond (Couleur principale de la marque)
+  "#9F0712",  // Rouge profond (Couleur secondaire de la marque)
+  "#62748E",  // Bleu acier
+  "#2C3E50",  // Gris bleu foncé
+  "#34495E",  // Gris bleu
+  "#516A8B"   // Bleu atténué
 ];
 const STATIC_STATS = {
   total_recommendations: 85,
@@ -44,21 +44,23 @@ const STATIC_STATS = {
 
 };
 
-
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    // keep static test data (unchanged)
+    // Garder les données de test statiques (inchangées)
     setStats(STATIC_STATS);
     // axios.get("/api/recommendation-stats").then(res => setStats(res.data));
   }, []);
 
   if (!stats) {
-    return <div className="flex items-center justify-center h-screen bg-slate-50">Loading...</div>;
+    return <div className="flex items-center justify-center h-screen bg-slate-50">Chargement...</div>;
   }
 
-  const statusData = Object.entries(stats.status_counts).map(([name, value]) => ({ name, value }));
+  const statusData = Object.entries(stats.status_counts).map(([name, value]) => ({ 
+    name: name === 'accepted' ? 'Acceptées' : name === 'refused' ? 'Refusées' : 'Achetées', 
+    value 
+  }));
   const productData = Object.entries(stats.product_counts).map(([name, value]) => ({ name, value }));
   const dateData = Object.entries(stats.by_date).map(([date, value]) => ({ date, value }));
 
@@ -69,42 +71,42 @@ export default function Dashboard() {
           <div className="flex">
            
 
-            {/* Main */}
+            {/* Contenu principal */}
             <main className="flex-1 p-6">
-              {/* Header */}
+              {/* En-tête */}
               <header className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <input placeholder="Search recommendations..." className="pl-4 pr-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm w-80 focus:outline-none" />
-                  <div className="text-sm text-slate-500">Overview</div>
+                  <input placeholder="Rechercher des recommandations..." className="pl-4 pr-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm w-80 focus:outline-none" />
+                  <div className="text-sm text-slate-500">Aperçu</div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <button className="px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 text-sm">Import</button>
+                  <button className="px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 text-sm">Exporter</button>
                   <div className="flex items-center gap-3">
-                    <div className="text-sm text-slate-600">Admin</div>
+                    <div className="text-sm text-slate-600">Administrateur</div>
                     <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white">A</div>
                   </div>
                 </div>
               </header>
 
-              {/* KPIs */}
+              {/* Indicateurs clés */}
               <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-                <CardKPI title="Total recommendations" value={stats.total_recommendations} hint="+12% this week" color="bg-slate-800" />
-                <CardKPI title="Accepted" value={stats.accepted} hint="Conversion" color="bg-blue-900" />
-                <CardKPI title="Refused" value={stats.refused} hint="Needs review" color="bg-red-800" />
-                <CardKPI title="Purchased" value={stats.purchased} hint="Revenue" color="bg-slate-500" />
+                <CardKPI title="Total des recommandations" value={stats.total_recommendations} hint="+12% cette semaine" color="bg-slate-800" />
+                <CardKPI title="Acceptées" value={stats.accepted} hint="Taux de conversion" color="bg-blue-900" />
+                <CardKPI title="Refusées" value={stats.refused} hint="Nécessite une révision" color="bg-red-800" />
+                <CardKPI title="Achetées" value={stats.purchased} hint="Revenus" color="bg-slate-500" />
               </section>
 
-              {/* Charts grid */}
+              {/* Grille des graphiques */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
 
-                {/* Left: Pie + Bottom charts */}
+                {/* Gauche : Graphique circulaire + graphiques inférieurs */}
                 <div className="lg:col-span-2 flex flex-col gap-6">
-                  {/* Top row: Pie chart */}
+                  {/* Ligne supérieure : Graphique circulaire */}
                   <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex-1">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-semibold text-slate-800">Recommendation Status</h3>
-                      <div className="text-sm text-slate-400">Last 7 days</div>
+                      <h3 className="text-lg font-semibold text-slate-800">Statut des recommandations</h3>
+                      <div className="text-sm text-slate-400">7 derniers jours</div>
                     </div>
                     <ResponsiveContainer width="100%" height={350}>
                       <PieChart>
@@ -130,18 +132,18 @@ export default function Dashboard() {
                   
                 </div>
                           
-                {/* Right column: widgets stacked, matching left height */}
-                <div className="flex flex-col gap-6  ">
+                {/* Colonne droite : widgets empilés, correspondant à la hauteur de gauche */}
+                <div className="flex flex-col gap-6">
                   <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
-                    <div className="text-sm text-slate-500 mb-2">Reminders</div>
-                    <div className="font-medium text-slate-800">Meeting with Product Team</div>
-                    <div className="text-xs text-slate-400 mt-1">Today 3:00 PM</div>
+                    <div className="text-sm text-slate-500 mb-2">Rappels</div>
+                    <div className="font-medium text-slate-800">Réunion avec l'équipe produit</div>
+                    <div className="text-xs text-slate-400 mt-1">Aujourd'hui 15:00</div>
                   </div>
 
                   <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex-1">
                     <div className="flex items-center justify-between mb-3">
-                      <div className="text-sm text-slate-500">Top Recommendations</div>
-                      <div className="text-xs text-slate-400">This week</div>
+                      <div className="text-sm text-slate-500">Meilleures recommandations</div>
+                      <div className="text-xs text-slate-400">Cette semaine</div>
                     </div>
                     <ul className="space-y-2">
                       {productData.slice(0, 5).map((p, i) => (
@@ -154,7 +156,7 @@ export default function Dashboard() {
                   </div>
 
                   <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex-1">
-                    <div className="text-sm text-slate-500 mb-2">Progress</div>
+                    <div className="text-sm text-slate-500 mb-2">Progrès</div>
                     <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         style={{
@@ -167,7 +169,7 @@ export default function Dashboard() {
                       />
                     </div>
                     <div className="flex justify-between text-xs text-slate-400 mt-3">
-                      <div>Purchased rate</div>
+                      <div>Taux d'achat</div>
                       <div>
                         {Math.round(
                           (stats.purchased / Math.max(1, stats.total_recommendations)) * 100
@@ -177,11 +179,11 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                {/* Bottom row: two charts taking full width */}
+                {/* Ligne inférieure : deux graphiques occupant toute la largeur */}
                   <div className="grid grid-cols-2 lg:col-span-3 gap-6 flex-1">
                     
                     <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm w-full">
-                      <h4 className="text-md font-semibold mb-3 text-slate-800">Top Products</h4>
+                      <h4 className="text-md font-semibold mb-3 text-slate-800">Meilleurs produits</h4>
                       <div className="w-full h-64">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={productData} margin={{ left: -10 }}>
@@ -196,7 +198,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm w-full">
-                      <h4 className="text-md font-semibold mb-3 text-slate-800">Trends by Date</h4>
+                      <h4 className="text-md font-semibold mb-3 text-slate-800">Tendances par date</h4>
                       <div className="w-full h-64">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={dateData}>
@@ -218,7 +220,7 @@ export default function Dashboard() {
                   </div>
               </div>
 
-              <footer className="mt-6 text-xs text-slate-400">© NEXT_BH Dashboard sample</footer>
+              <footer className="mt-6 text-xs text-slate-400">© NEXT_BH Échantillon de tableau de bord</footer>
             </main>
           </div>
         </div>
@@ -239,4 +241,3 @@ function CardKPI({ title, value, hint, color }) {
     </div>
   );
 }
-//

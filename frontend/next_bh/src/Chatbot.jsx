@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import bh_logo from './Images/bh_logo-removebg-preview.png';
 import {
   FaFacebookF, FaLinkedinIn, FaYoutube, FaInstagram,
@@ -16,7 +18,7 @@ const Chatbot = () => {
 
   // Auto-scroll to bottom of chat
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth",block: "center"  });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [messages]);
 
   // Initial greeting
@@ -43,7 +45,7 @@ const Chatbot = () => {
     const payload = {
       client_ref: "9086",  // ⚠️ tu peux le passer dynamiquement si besoin
       message: input,
-      history : []
+      history: []
     };
 
     try {
@@ -52,7 +54,7 @@ const Chatbot = () => {
       await new Promise(resolve => setTimeout(resolve, 800));
       
       const response = await axios.post(
-        `http://127.0.0.1:8000/chat`, 
+        `http://127.0.0.1:5000/chat`, 
         payload,
         {
           headers: {
@@ -89,53 +91,52 @@ const Chatbot = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white w-full">
       {/* Modern Header */}
-       <div className="font-sans ">
-      <div className="bg-red-600 text-white text-sm py-3 px-6 flex flex-wrap justify-between items-center">
-        <div className="flex flex-wrap gap-6 items-center">
-          <span className="flex items-center gap-1"><FaMapMarkerAlt /> Immeuble BH Assurance, Centre Urbain Nord - Tunis</span>
-          <span className="flex items-center gap-1"><FaEnvelope /> commercial@bh-assurance.com</span>
-          <span className="flex items-center gap-1"><FaPhoneAlt /> +216 71 184 200</span>
-        </div>
-        <div className="flex gap-4 items-center text-lg">
-          <FaFacebookF />
-          <FaLinkedinIn />
-          <FaYoutube />
-          <FaInstagram />
-        </div>
-      </div>
-
-      {/* Logo + Main Menu */}
-      <div className="bg-gray-100 shadow">
-        <div className="container mx-auto flex justify-between items-center px-6 py-2">
-          <img src={bh_logo} alt="BH Assurance Logo" className="" />
-          <nav className="flex gap-8 text-gray-800 font-medium">
-            <button className="hover:text-red-600 transition">Particuliers</button>
-            <button className="hover:text-red-600 transition">Professionnels & Entreprises</button>
-            <button className="hover:text-red-600 transition">BH Assurance</button>
-          </nav>
-          <button className="bg-red-600 hover:bg-red-700 transition text-white px-5 py-2 rounded-lg font-semibold">Mon espace Wininti</button>
-        </div>
-      </div>
-
-      {/* Submenu */}
-      <div className="bg-white border-t border-gray-200 shadow-sm">
-        <div className="container mx-auto flex justify-between items-center px-6 py-3">
-          <div className="flex gap-6 text-gray-700 text-sm">
-            <button className="hover:text-red-600">À propos de nous</button>
-            <button className="hover:text-red-600">Nos actualités</button>
-            <button className="hover:text-red-600">Nos agences</button>
-            <button className="hover:text-red-600">Assistance et sinistre</button>
-            <button className="hover:text-red-600">FAQ</button>
-            <button className="hover:text-red-600">Contact</button>
-            <button className="text-blue-600 font-semibold">Challenge NEXT</button>
+      <div className="font-sans">
+        <div className="bg-red-600 text-white text-sm py-3 px-6 flex flex-wrap justify-between items-center">
+          <div className="flex flex-wrap gap-6 items-center">
+            <span className="flex items-center gap-1"><FaMapMarkerAlt /> Immeuble BH Assurance, Centre Urbain Nord - Tunis</span>
+            <span className="flex items-center gap-1"><FaEnvelope /> commercial@bh-assurance.com</span>
+            <span className="flex items-center gap-1"><FaPhoneAlt /> +216 71 184 200</span>
           </div>
-          <div className="flex items-center gap-2">
-            <input type="text" className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Recherche..." />
-            <FaSearch className="text-gray-600" />
+          <div className="flex gap-4 items-center text-lg">
+            <FaFacebookF />
+            <FaLinkedinIn />
+            <FaYoutube />
+            <FaInstagram />
           </div>
         </div>
-      </div>
 
+        {/* Logo + Main Menu */}
+        <div className="bg-gray-100 shadow">
+          <div className="container mx-auto flex justify-between items-center px-6 py-2">
+            <img src={bh_logo} alt="BH Assurance Logo" className="h-12" />
+            <nav className="flex gap-8 text-gray-800 font-medium">
+              <button className="hover:text-red-600 transition">Particuliers</button>
+              <button className="hover:text-red-600 transition">Professionnels & Entreprises</button>
+              <button className="hover:text-red-600 transition">BH Assurance</button>
+            </nav>
+            <button className="bg-red-600 hover:bg-red-700 transition text-white px-5 py-2 rounded-lg font-semibold">Mon espace Wininti</button>
+          </div>
+        </div>
+
+        {/* Submenu */}
+        <div className="bg-white border-t border-gray-200 shadow-sm">
+          <div className="container mx-auto flex justify-between items-center px-6 py-3">
+            <div className="flex gap-6 text-gray-700 text-sm">
+              <button className="hover:text-red-600">À propos de nous</button>
+              <button className="hover:text-red-600">Nos actualités</button>
+              <button className="hover:text-red-600">Nos agences</button>
+              <button className="hover:text-red-600">Assistance et sinistre</button>
+              <button className="hover:text-red-600">FAQ</button>
+              <button className="hover:text-red-600">Contact</button>
+              <button className="text-blue-600 font-semibold">Challenge NEXT</button>
+            </div>
+            <div className="flex items-center gap-2">
+              <input type="text" className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Recherche..." />
+              <FaSearch className="text-gray-600" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -166,20 +167,42 @@ const Chatbot = () => {
           </div>
 
           {/* Chat Window */}
-          <div className="h-96 overflow-y-auto p-4 bg-gray-50">
-            <div className="space-y-3">
+          <div className="h-96 overflow-y-auto p-6 bg-gray-50">
+            <div className="space-y-4">
               {messages.map((msg, index) => (
                 <div 
                   key={`${msg.timestamp}-${index}`}
                   className={`flex ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'}`}
                 >
                   <div 
-                    className={`max-w-xs md:max-w-md rounded-xl p-4 ${msg.sender === 'bot' 
-                      ? 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm' 
-                      : 'bg-blue-600 text-white rounded-br-none'}`}
+                    className={`max-w-xs md:max-w-md rounded-xl p-4 ${
+                      msg.sender === 'bot' 
+                        ? 'bg-blue-50 border border-blue-200 text-gray-800 rounded-bl-none shadow-sm' 
+                        : 'bg-blue-600 text-white rounded-br-none shadow-md'
+                    }`}
                   >
-                    <div className="text-sm">{msg.text}</div>
-                    <div className={`text-xs mt-1 ${msg.sender === 'bot' ? 'text-gray-500' : 'text-blue-100'}`}>
+                    {msg.sender === 'bot' ? (
+                      <div className="text-sm prose prose-sm max-w-none leading-relaxed">
+                        <ReactMarkdown 
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2" {...props} />,
+                            ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2" {...props} />,
+                            li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                            p: ({node, ...props}) => <p className="mb-2" {...props} />,
+                            strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+                            a: ({node, ...props}) => <a className="text-blue-600 hover:underline" {...props} />
+                          }}
+                        >
+                          {msg.text}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <div className="text-sm">{msg.text}</div>
+                    )}
+                    <div className={`text-xs mt-2 ${
+                      msg.sender === 'bot' ? 'text-gray-500' : 'text-blue-100'
+                    }`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                     </div>
                   </div>

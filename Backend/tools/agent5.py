@@ -58,7 +58,7 @@ try:
 except Exception as e:
     raise ValueError(f"Erreur de connexion MongoDB: {e}")
 
-OPENROUTER_API_KEY = os.getenv("deepseekkey")
+OPENROUTER_API_KEY = os.getenv("deepseek_r1")
 if not OPENROUTER_API_KEY:
     raise ValueError("La clé API deepseekkey n'est pas définie dans .env")
 
@@ -148,7 +148,7 @@ def get_llm_deepseek():
     return ChatOpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=OPENROUTER_API_KEY,
-        model="deepseek/deepseek-chat-v3-0324:free",
+        model="deepseek/deepseek-r1-0528:free",
         temperature=0.7,
     )
 
@@ -156,14 +156,14 @@ def get_llm_backup():
     return ChatOpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=os.getenv("z_key"),
-        model="z-ai/glm-4.5-air:free",
+        model="deepseek/deepseek-chat-v3-0324:free",
         temperature=0.7,
     )
 def get_llm_backup2():
     return ChatOpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=os.getenv("deepseekkey_compte2"),
-        model="deepseek/deepseek-chat-v3-0324:free",
+        api_key=os.getenv("deepseekkey2"),
+        model="tngtech/deepseek-r1t2-chimera:free",
         temperature=0.7,
     )
 
