@@ -10,7 +10,7 @@ function App() {
       <div className="min-h-screen bg-gray-100">
         {/* Routes */}
         <Routes>
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/chatbot/:client_ref" element={<Chatbot />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/client" element={<Client />} />
 
