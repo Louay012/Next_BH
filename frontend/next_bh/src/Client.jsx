@@ -453,39 +453,11 @@ function Client() {
 
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-slate-800 to-gray-900' : 'bg-gradient-to-br from-teal-50 to-gray-100'}`}>
       {/* Modern Header */}
       
-      {menuOpen && (
-                  <div className="absolute w-2/3 top-20 bg-white border rounded-lg shadow-lg  p-4 z-50">
-                    <h3 className="text-lg font-bold mb-3">💡 Recommandations</h3>
-
-                    {loading ? (
-                      <div className="flex items-center justify-center py-10">
-                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-indigo-600"></div>
-                        <span className="ml-3 text-gray-600">Chargement...</span>
-                      </div>
-                    ) : recommendations.length > 0 ? (
-                      recommendations.map((rec, i) => (
-                        <div key={i} className="border-l-4 border-indigo-500 pl-3 mb-3">
-                          <p className="font-semibold">🎯 {rec.produit}</p>
-                          <p><strong>Priorité:</strong> {rec.priorité}</p>
-                          <p><strong>Raison:</strong> {rec.raison}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500">Aucune recommandation disponible</p>
-                    )}
-
-                    <button
-                      onClick={() => setMenuOpen(false)}
-                      className="mt-4 w-full bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg"
-                    >
-                      Fermer
-                    </button>
-                  </div>
-                )}
-      <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      
+      <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8" >
         {/* Main Content Container */}
         
         <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-lg p-6 mb-8 border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-all duration-300 hover:shadow-xl`}>
