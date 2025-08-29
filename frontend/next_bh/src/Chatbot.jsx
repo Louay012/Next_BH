@@ -43,9 +43,9 @@ const Chatbot = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     const payload = {
-      client_ref: client_ref || "9086",
-      message: input,
-      history: []
+
+      client_ref: client_ref,  // ⚠️ tu peux le passer dynamiquement si besoin
+      message: input
     };
     try {
       setIsLoading(true);
@@ -64,7 +64,7 @@ const Chatbot = () => {
       
       const botMessage = { 
         sender: 'bot', 
-        text: response?.data?.response || "Je n'ai pas pu traiter votre demande. Veuillez réessayer.",
+        text: response.data?.response|| "Je n'ai pas pu traiter votre demande. Veuillez réessayer.",
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, botMessage]);

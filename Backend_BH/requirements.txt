@@ -1,0 +1,16 @@
+langchain
+faiss-cpu
+huggingface-hub
+sentence-transformers
+ctransformers
+pymupdf
+pip install openai
+pymongo
+langchain_openai
+langgraph
+bson
+
+ pip install langchain_openai langgraph
+ pip install -U langchain-ollama
+
+ pip install googletrans==4.0.0-rc1
