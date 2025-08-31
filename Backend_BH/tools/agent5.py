@@ -137,7 +137,7 @@ def get_recommendations(client_ref):
     base_url="http://localhost:11434",
 )"""
     # Génération du token
-    client_ref="13743"
+    client_ref="11152"
     
     # Prompt
     prompt = [

@@ -9,7 +9,6 @@ from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from .analyseDB_tool import analyseDB
 from .RAG2_tool import rag_tool
-from .table_tool import recommendation_tool
 from .search_tool import search_tool
 from .traduire_tool import translate
 from .generateToken import generate_token
@@ -70,7 +69,7 @@ if not OPENROUTER_API_KEY:
 
 
 
-ref = "13354"
+#ref = "13354"
 
 
 # Prompt principal
@@ -130,6 +129,72 @@ def get_llm_backup2():
 
 
 def get_recommendations_list(client_ref):
+    llm = get_llm_deepseek()
+    # Prompt setup
+    prompt = [
+        {
+            "role": "system",
+            "content": (
+                "Vous êtes un expert en assurance avec 30 ans d'expérience."
+                "Votre mission : analyser les données d'un client et, en suivant une logique métier, recommander un produit adapté à son profil."
+                "Le résultat final doit être sous le format JSON suivant :\n"
+                "[{\n"
+                "  \"raisonnement\": \"...\",\n"
+                "  \"produit_recommande\": \"...\",\n"
+                "  \"branche\": \"...\",\n"
+                "  \"score_pertinence\": \".../100\",\n"
+                "  \"errors\": \"...\"\n"
+                "}]\n"
+            )
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Recommander un produit d'assurance adapté au client de référence ref = {client_ref} "
+                "en utilisant les outils disponibles, et expliquer la logique de choix étape par étape avant la réponse finale."
+            )
+        }
+    ]
+    agent = create_react_agent(llm, tools)
+
+    try:
+        log_message("Envoi de la requête à Deepseek...", "INFO")
+        result = agent.invoke({"messages": prompt})
+        log_message("Réponse obtenue depuis Deepseek ✅", "SUCCESS")
+    except Exception as e:
+        log_message(f"Erreur avec Deepseek : {e}", "WARNING")
+        log_message("Bascule vers le LLM de secours...", "WARNING")
+        llm = get_llm_backup()
+        agent = create_react_agent(llm, tools)
+        try:
+            result = agent.invoke({"messages": prompt})
+            log_message("Réponse obtenue depuis le LLM de secours ✅", "SUCCESS")
+        except Exception as e:
+            log_message(f"Erreur avec le LLM de secours : {e}", "ERROR")
+            return {"status": "error", "message": "Erreur lors de la génération des recommandations."}
+
+    # Extract the last AI response
+    messages = result.get("messages", [])
+    for msg in reversed(messages):
+        if hasattr(msg, "content"):
+            try:
+                response_text = msg.content
+                # Extract JSON array from the response
+                json_match = re.search(r"\[.*\]", response_text, re.DOTALL)
+                if json_match:
+                    recommendations = json.loads(json_match.group(0))
+                    return {
+                        "status": "success",
+                        "data": recommendations
+                    }
+                else:
+                    log_message("Aucun tableau JSON valide trouvé dans la réponse.", "ERROR")
+                    return {"status": "error", "message": "Aucun tableau JSON valide trouvé dans la réponse."}
+            except json.JSONDecodeError as e:
+                log_message(f"Erreur de parsing JSON : {e}", "ERROR")
+                return {"status": "error", "message": "Erreur de parsing JSON."}
+
+    return {"status": "error", "message": "Aucune réponse valide trouvée."}
     llm = get_llm_deepseek()
     """"llm = ChatOllama(
     model="llama3.1:8b",  # Modèle adapté à ta GTX + CPU i5

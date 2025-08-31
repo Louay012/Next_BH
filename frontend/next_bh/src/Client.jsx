@@ -4,7 +4,7 @@ import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, Cart
 
 import './App.css';
 import { IoAddCircleOutline } from "react-icons/io5";
-
+import axios from 'axios';
 // Modern color palette
 const COLORS = [
   "#6EE7B7", 
@@ -248,8 +248,8 @@ const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
               <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{recommendation.raisonnement}</p>
             </div>
           </div>
-          
-          <div className="mb-8">
+
+          {recommendation.pitch && <div className="mb-8">
             <h3 className={`text-xl font-bold mb-4 flex items-center ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${darkMode ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
                 <svg className={`w-5 h-5 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -261,8 +261,8 @@ const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
             <div className={`${darkMode ? 'bg-indigo-900/20 border-indigo-700' : 'bg-indigo-50 border-indigo-100'} p-6 rounded-2xl border backdrop-blur-sm`}>
               <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'} whitespace-pre-line`}>{recommendation.pitch}</p>
             </div>
-          </div>
-          
+          </div>}
+
           <div className="flex justify-end space-x-3">
             <button
               onClick={onClose}
@@ -287,9 +287,146 @@ const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
     </div>
   );
 };
+// ...existing code...
 
+const RecommendationsListModal = ({ recommendations, isOpen, onClose, onSelect, darkMode, loading }) => {
+  if (!isOpen) return null;
+
+  // extract first number from "85/100" or fallback to score_value
+  const parseScore = (rec) => {
+    const raw = rec?.score_pertinence ?? rec?.score_value ?? '';
+    const m = String(raw).match(/(\d{1,3})/);
+    return m ? parseInt(m[1], 10) : 0;
+  };
+
+  const scoreClasses = (n) => {
+    if (n >= 80) return 'bg-green-100 text-green-800';
+    if (n >= 60) return 'bg-yellow-100 text-yellow-800';
+    return 'bg-red-100 text-red-800';
+  };
+const accentClass = (n) => {
+    if (n >= 80) return 'bg-green-500/10';
+    if (n >= 60) return 'bg-yellow-400/10';
+    return 'bg-red-400/10';
+  };
+  return (
+    <div
+      className="fixed inset-0 backdrop-blur-md bg-black/40 flex items-center justify-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Liste des recommandations"
+    >
+      <div className={`${darkMode ? 'bg-gray-900' : 'bg-white'} rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden border ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        {/* Header */}
+        <div className={`flex items-center justify-between p-6 border-b ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+          <div>
+            <h2 className={`text-2xl font-extrabold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Recommendations</h2>
+            <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              {recommendations?.length ?? 0} résultat{recommendations && recommendations.length > 1 ? 's' : ''}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              aria-label="Fermer la liste des recommandations"
+              title="Fermer"
+              className={`p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 focus:ring-indigo-500' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 focus:ring-indigo-500'
+              }`}
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 max-h-[76vh] overflow-y-auto">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-56">
+              <div className="relative w-20 h-20">
+                <div className="w-20 h-20 rounded-full border-4 border-indigo-200"></div>
+                <div className="w-20 h-20 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin absolute inset-0"></div>
+              </div>
+              <p className={`mt-4 text-lg font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Chargement des recommandations…</p>
+            </div>
+          ) : !recommendations || recommendations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-56">
+              <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-4 ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <svg className={`w-8 h-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Aucune recommandation disponible</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {recommendations.map((recommendation, index) => {
+                const numericScore = parseScore(recommendation);
+                const badgeClass = scoreClasses(numericScore);
+                const accent = accentClass(numericScore);
+
+                return (
+                  <div
+                    key={index}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelect(recommendation); }}
+                    onClick={() => onSelect(recommendation)}
+                    className={`relative flex flex-col justify-between p-5 rounded-2xl shadow-md transition transform duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer ${
+                      darkMode ? 'bg-gray-800 text-gray-100 hover:bg-gray-700 focus:ring-indigo-500' : 'bg-white text-gray-900 hover:shadow-lg focus:ring-indigo-500'
+                    }`}
+                    aria-label={`Voir la recommandation ${recommendation.produit_recommande}`}
+                    title={recommendation.produit_recommande}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-semibold truncate">{recommendation.produit_recommande}</h4>
+                          <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{recommendation.branche}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex-shrink-0 text-right ml-3">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${badgeClass}`}>
+                          {recommendation.score_pertinence}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={`mt-3 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'} whitespace-pre-line line-clamp-3`}>
+                      {recommendation.raisonnement || ''}
+                    </div>
+
+                    {/* Decorative accent bar */}
+                    <div className={`absolute left-0 top-0 bottom-0 w-4 rounded-l-2xl ${accent}`} aria-hidden="true"></div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className={`flex items-center justify-end gap-3 p-4 border-t ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+          <button
+            onClick={onClose}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              darkMode ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 focus:ring-indigo-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-indigo-500'
+            }`}
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+// ...existing code...
 function Client() {
-  const [clientId, setClientId] = useState('1381');
+  const [clientId, setClientId] = useState('715');
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -298,23 +435,114 @@ function Client() {
   const [darkMode, setdarkMode] = useState(false);
   const [new_recommendations, setNewRecommendations] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
 
+
+  const openListModal = () => {
+    setIsListModalOpen(true);
+  };
+
+  const closeListModal = () => {
+    setIsListModalOpen(false);
+  };
+
+  const handleSelectRecommendation = (recommendation) => {
+    setSelectedRecommendation(recommendation);
+    setIsListModalOpen(false); // Close the list modal
+    setIsModalOpen(true); // Open the existing RecommendationModal
+  };
   const handleNewRecommendation = async () => {
-  setLoading(true); // tu peux afficher un spinner
-  
-  try {
-    //const res = await fetch("http://localhost:5000/api/recommendations");
-    const data = staticData.recommendations[0];
-    
-    // suppose que l’API retourne une seule recommandation
-    setSelectedRecommendation(data);
-    setIsModalOpen(true); // ouvre le modal
-  } catch (error) {
-    console.error("Erreur recommandation:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+          setIsListModalOpen(true); // Open the modal immediately
+          setLoading(true); // Show the loading screen
+
+        try {
+                //const response = await axios.get(`http://127.0.0.1:5000/recommendations_list/${clientId}`);
+                //const data = response.data; // Axios automatically parses JSON responses
+                const data={
+            "data": {
+                "response": "\nJe vais proc\u00e9der \u00e0 une analyse compl\u00e8te du client et \u00e0 la recommandation de produits d'assurance adapt\u00e9s, m\u00eame si l'outil de recherche rencontre une erreur technique.\n\n## Analyse d\u00e9taill\u00e9e du client REF 715\n\n### Informations du client :\n- **R\u00e9f\u00e9rence :** 715\n- **Nom :** Personne_00001\n- **\u00c2ge :** 60 ans (n\u00e9 le 28/09/1964)\n- **Sexe :** Masculin\n- **Situation familiale :** Mari\u00e9\n- **Profession :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste\n- **Secteur d'activit\u00e9 :** Cadres et professions intellectuelles sup\u00e9rieures\n\n### Situation contractuelle actuelle :\n- **4 contrats automobiles** tous r\u00e9sili\u00e9s\n- **Total capital assur\u00e9 :** 83 750 \u20ac\n- **Sinistres :** 1 sinistre automobile historique (2002) de 2 037.34 \u20ac\n\n### Opportunit\u00e9s identifi\u00e9es par le syst\u00e8me :\n1. **Manque de produit sant\u00e9** \u2192 Recommandation : ASSURANCE SANTE\n2. **Manque de produit vie** \u2192 Recommandation : ASSURANCE VIE\n\n## Raisonnement m\u00e9tier d\u00e9taill\u00e9\n\n### \u00c9tape 1 : Analyse du profil client\n- **Profil professionnel :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste de 60 ans\n- **Situation familiale :** Mari\u00e9 (responsabilit\u00e9 familiale)\n- **\u00c2ge :** 60 ans (approche de la retraite)\n- **Besoins sp\u00e9cifiques :** Protection professionnelle, sant\u00e9 familiale, pr\u00e9paration retraite\n\n### \u00c9tape 2 : \u00c9valuation des risques\n1. **Risque professionnel :** Exercice de la m\u00e9decine n\u00e9cessite une protection adapt\u00e9e\n2. **Risque sant\u00e9 :** \u00c2ge avanc\u00e9, besoins m\u00e9dicaux importants\n3. **Risque vie :** Protection familiale en cas de d\u00e9c\u00e8s\n4. **Risque pr\u00e9voyance :** Incapacit\u00e9 de travail ou invalidit\u00e9\n\n### \u00c9tape 3 : Analyse des lacunes contractuelles\n- **Aucune assurance sant\u00e9 :** Risque important pour un professionnel de sant\u00e9\n- **Aucune assurance vie :** Non-protection des ayants droit\n- **Contrats automobiles tous r\u00e9sili\u00e9s :** Possible historique de sinistres ou non-paiements\n\n### \u00c9tape 4 : D\u00e9finition des besoins prioritaires\n1. **Assurance sant\u00e9 professionnelle :** Pour couvrir les risques li\u00e9s \u00e0 l'exercice m\u00e9dical\n2. **Assurance vie :** Pour prot\u00e9ger la famille en cas de d\u00e9c\u00e8s\n3. **Pr\u00e9voyance professionnelle :** Pour couvrir les risques d'incapacit\u00e9 de travail\n\n## Recommandations de produits\n\nMalgr\u00e9 l'erreur technique sur l'outil de recherche, je peux baser mes recommandations sur les opportunit\u00e9s identifi\u00e9es par le syst\u00e8me et les r\u00e8gles m\u00e9tier :\n\n### Produit 1 : Assurance Sant\u00e9 Professionnelle\n- **Branche :** Sant\u00e9\n- **Raison :** M\u00e9decin lib\u00e9ral ayant besoin d'une protection sant\u00e9 adapt\u00e9e \u00e0 sa profession\n- **Score de pertinence :** 95/100\n- **Justification :** Essentiel pour un professionnel de sant\u00e9 de 60 ans, couvre les risques professionnels et personnels\n\n### Produit 2 : Assurance Vie\n- **Branche :** Vie\n- **Raison :** Mari\u00e9 ayant besoin de prot\u00e9ger sa famille\n- **Score de pertinence :** 90/100\n- **Justification :** Protection des ayants droit, adaptation \u00e0 l'\u00e2ge et situation familiale\n\n### Produit 3 : Pr\u00e9voyance Professionnelle\n- **Branche :** Pr\u00e9voyance\n- **Raison :** Profession \u00e0 risque n\u00e9cessitant une couverture d'incapacit\u00e9\n- **Score de pertinence :** 85/100\n- **Justification :** Couvre les risques professionnels sp\u00e9cifiques aux m\u00e9decins lib\u00e9raux\n\n[\n  {\n    \"raisonnement\": \"Client de 60 ans, m\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste, mari\u00e9. Aucune assurance sant\u00e9 d\u00e9tect\u00e9e alors que c'est essentiel pour un professionnel de sant\u00e9. Risque professionnel important et besoins de sant\u00e9 personnels non couverts.\",\n    \"produit_recommande\": \"Assurance Sant\u00e9 Professionnelle\",\n    \"branche\": \"Sant\u00e9\",\n    \"score_pertinence\": \"95/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"Mari\u00e9 de 60 ans sans protection familiale. Aucune assurance vie d\u00e9tect\u00e9e alors que c'est crucial pour prot\u00e9ger les ayants droit. Situation familiale n\u00e9cessitant une couverture en cas de d\u00e9c\u00e8s.\",\n    \"produit_recommande\": \"Assurance Vie\",\n    \"branche\": \"Vie\",\n    \"score_pertinence\": \"90/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"M\u00e9decin lib\u00e9ral de 60 ans avec risques professionnels sp\u00e9cifiques. Aucune pr\u00e9voyance d\u00e9tect\u00e9e. Besoin de couverture en cas d'incapacit\u00e9 de travail ou d'invalidit\u00e9 li\u00e9e \u00e0 l'exercice m\u00e9dical.\",\n    \"produit_recommande\": \"Pr\u00e9voyance Professionnelle\",\n    \"branche\": \"Pr\u00e9voyance\",\n    \"score_pertinence\": \"85/100\",\n    \"errors\": \"\"\n  }\n]"
+            },
+            "status": "success"}
+        console.log("Full backend response:", data); // Log the full response for debugging
+
+        if (data.status === "success") {
+          const recommendationsString = data.data.response; // Extract the response string
+          console.log("Recommendations String:", recommendationsString); // Log the raw recommendations string
+          const jsonMatch = recommendationsString.match(/\[\s*{.*?}\s*\]/s); // Match JSON array with objects
+          console.log("JSON Match:", jsonMatch);
+          if (jsonMatch) {
+            const parsedRecommendations = JSON.parse(jsonMatch[0]); // Parse the JSON array
+            setNewRecommendations(parsedRecommendations); // Update the state
+            console.log("Parsed Recommendations:", parsedRecommendations); // Log the parsed recommendations
+          } else {
+            console.error("No valid JSON array found in the response.");
+            setNewRecommendations([recommendationsString]); // Fallback to an empty array
+          }
+        } else {
+          console.error(data.message || "Invalid response format.");
+          setNewRecommendations([]); // Fallback to an empty array
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des données depuis l'API :", error);
+        setNewRecommendations([]); // Fallback to an empty array
+      } finally {
+        setLoading(false); // Hide the loading screen
+      }
+      };
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Prevent default form submission
+    if (!clientId.trim()) {
+      console.error("Client ID is required");
+      setError("Veuillez fournir un ID client valide.");
+      return;
+    }
+
+    setLoading(true); // Show loading spinner
+    setDashboard(null); // Reset dashboard state
+    setError(null); // Clear previous errors
+
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/resume_recommendations_client/${clientId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log("Raw response:", response);
+      const data = await response.json();
+
+      // Map backend response to frontend state with sanitization
+      const mappedData = {
+        recommendations: Array.isArray(data.recommendations_details) ? data.recommendations_details : [],
+        stats: {
+          total_recommendations: data.total_recommendations || 0,
+          accepted_count: data.accepted || 0,
+          refused_count: data.refused || 0,
+          pending_count: data.pending || 0,
+          branch_distribution: data.top5_recommended || {},
+          score_distribution: data.top5_accepted || {},
+          timeline_data: data.timeline_data || [] // Add timeline data if available
+        },
+        client_name: data.client_info?.name || "Inconnu",
+        client_details: data.client_info || {}
+      };
+
+      setDashboard(mappedData); // Update state with mapped data
+    } catch (error) {
+      console.error("Erreur lors du chargement des données client :", error);
+      setError("Impossible de charger les données du client. Veuillez réessayer plus tard.");
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
+  };
+
+  const openRecommendationModal = (recommendation) => {
+    setSelectedRecommendation(recommendation);
+    setIsModalOpen(true);
+  };
+
+  const closeRecommendationModal = () => {
+    setIsModalOpen(false);
+    setSelectedRecommendation(null);
+  };
 
   // Initialize dark mode
   useEffect(() => {
@@ -337,93 +565,87 @@ function Client() {
     setdarkMode(!darkMode);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setDashboard(staticData);
-      setLoading(false);
-    }, 800);
-  }, [clientId]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setDashboard(staticData);
-      setLoading(false);
-    }, 800);
-  };
-
-  const openRecommendationModal = (recommendation) => {
-    setSelectedRecommendation(recommendation);
-    setIsModalOpen(true);
-  };
-
-  const closeRecommendationModal = () => {
-    setIsModalOpen(false);
-    setSelectedRecommendation(null);
-  };
-
-  if (loading) return (
-    <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className="flex flex-col items-center">
-        <div className="relative">
-          <div className="w-16 h-16 rounded-full border-4 border-indigo-200"></div>
-          <div className="w-16 h-16 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin absolute top-0 left-0"></div>
+  if (loading) {
+    return (
+      <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="flex flex-col items-center">
+          <div className="relative">
+            <div className="w-16 h-16 rounded-full border-4 border-indigo-200"></div>
+            <div className="w-16 h-16 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin absolute top-0 left-0"></div>
+          </div>
+          <p className={`mt-6 text-lg font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Chargement des données client...</p>
         </div>
-        <p className={`mt-6 text-lg font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Chargement des données client...</p>
       </div>
-    </div>
-  );
-  
-  if (error) return (
-    <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-xl max-w-md w-full`}>
-        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mx-auto mb-6">
-          <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3,1.732 3z" />
-          </svg>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-xl max-w-md w-full`}>
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mx-auto mb-6">
+            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3,1.732 3z" />
+            </svg>
+          </div>
+          <h3 className={`text-xl font-bold text-center mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Erreur de chargement</h3>
+          <p className={`text-center mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{error}</p>
+          <button 
+            onClick={() => setError(null)}
+            className={`w-full py-3 px-4 rounded-xl font-medium transition-colors ${
+              darkMode 
+                ? 'bg-indigo-600 text-white hover:bg-indigo-500' 
+                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+            }`}
+          >
+            Réessayer
+          </button>
         </div>
-        <h3 className={`text-xl font-bold text-center mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Erreur de chargement</h3>
-        <p className={`text-center mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{error}</p>
-        <button 
-          onClick={() => setError(null)}
-          className={`w-full py-3 px-4 rounded-xl font-medium transition-colors ${
-            darkMode 
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500' 
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
-          }`}
-        >
-          Réessayer
-        </button>
       </div>
-    </div>
-  );
-  
-  if (!dashboard) return (
-    <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className="text-center max-w-md">
-        <div className={`w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-6 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <svg className={`w-12 h-12 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+    );
+  }
+
+  if (!dashboard) {
+    return (
+      <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="text-center max-w-md">
+          <div className={`w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-6 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <svg className={`w-12 h-12 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Bienvenue</h3>
+          <p className={`mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Veuillez entrer un ID client pour commencer.</p>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-center space-y-4"
+          >
+            <input
+              type="text"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              placeholder="Entrez l'ID client"
+              className={`px-4 py-3 w-full rounded-lg outline-none border ${
+                darkMode
+                  ? 'border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-400'
+                  : 'border-gray-500 bg-white text-gray-900 placeholder-gray-500'
+              } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+            />
+            <button
+              type="submit"
+              className={`px-6 py-3 rounded-xl font-medium transition-colors ${
+                darkMode
+                  ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+              }`}
+            >
+              Rechercher
+            </button>
+          </form>
         </div>
-        <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Aucune donnée client</h3>
-        <p className={`mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Veuillez rechercher un ID client pour commencer.</p>
-        <button 
-          onClick={() => setClientId('1381')}
-          className={`px-6 py-3 rounded-xl font-medium transition-colors ${
-            darkMode 
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500' 
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
-          }`}
-        >
-          Charger exemple
-        </button>
-        
       </div>
-    </div>
-  );
+    );
+  }
 
   // Safely destructure with default values
   const { 
@@ -433,7 +655,6 @@ function Client() {
     client_details = {} 
   } = dashboard;
 
-  // Safely get stats with defaults
   const {
     total_recommendations = 0,
     accepted_count = 0,
@@ -444,11 +665,11 @@ function Client() {
     timeline_data = []
   } = stats;
 
-  // Prepare chart data with fallbacks
   const branchData = Object.entries(branch_distribution).map(([name, value]) => ({ name, value }));
   const scoreData = Object.entries(score_distribution).map(([name, value]) => ({ name, value }));
   const chartColors = darkMode ? DARK_COLORS : COLORS;
-// Prepare data for the new status chart (showing actual counts)
+
+  // Prepare data for the new status chart (showing actual counts)
 // Prepare data for the radial bar chart
 
 
@@ -466,7 +687,7 @@ function Client() {
           <div className="flex items-center space-x-4">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${darkMode ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
               <svg className={`w-6 h-6 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
             <div>
@@ -527,7 +748,7 @@ function Client() {
           
           {/* Modern Client info card */}
           <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-50'} rounded-2xl p-6 mb-6 transition-all duration-300`}>
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+            <div className="flex flex-col md:flex-row items-center md:items-center justify-between">
               <div className="flex items-center space-x-5 mb-6 md:mb-0">
                 <div className={`relative ${darkMode ? 'bg-indigo-200/30' : 'bg-indigo-100'} w-20 h-20 rounded-2xl flex items-center justify-center`}>
                   <span className={`text-2xl font-bold  ${darkMode ? 'text-indigo-100' : 'text-indigo-700'}`}>
@@ -562,13 +783,13 @@ function Client() {
                   </>
                 )}
               </div>
-              <div className='flex items-center space-x-4 mt-4 md:mt-0'>
+              <div className='flex justify-center items-center space-x-4 mt-4 md:mt-0'>
                 <button
                   onClick={handleNewRecommendation}
-                  className={`p-2 h-12 flex items-center gap-3 cursor-pointer rounded-2xl ${darkMode ? 'bg-green-400 text-gray-50 hover:bg-green-300' : 'bg-blue-200 text-gray-700 hover:bg-blue-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors`}
+                  className={`p-2 h-12 w-48 flex items-center gap-3 cursor-pointer rounded-2xl ${darkMode ? 'bg-green-400 text-gray-50 hover:bg-green-300' : 'bg-blue-200 text-gray-700 hover:bg-blue-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors`}
                 >
                   <IoAddCircleOutline className='h-6 w-6'/>
-                  New Recommandation
+                  Nouveau Conseil
                 </button>
                 
               </div>
@@ -823,7 +1044,7 @@ function Client() {
                     <h3 className={`text-lg font-bold flex items-center ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                       <div className={`w-6 h-6 rounded-lg flex items-center justify-center mr-2 ${darkMode ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
                         <svg className={`w-4 h-4 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                       </div>
                       Scores de Pertinence
@@ -880,35 +1101,35 @@ function Client() {
                     </div>
                   </div>
                   <div className="h-64">
-                    {timeline_data.length > 0 ? (
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={timeline_data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#374151" : "#f0f0f0"} vertical={false} />
-                          <XAxis dataKey="date" tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
-                          <YAxis tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
-                          <Tooltip content={<CustomTooltip darkMode={darkMode} />} />
-                          <Line 
-                            type="monotone" 
-                            dataKey="count" 
-                            name="Recommandations" 
-                            stroke={darkMode ? "#818CF8" : "#6366F1"} 
-                            strokeWidth={3} 
-                            dot={{ r: 6, fill: darkMode ? "#818CF8" : "#6366F1", strokeWidth: 2, stroke: darkMode ? "#1F2937" : "#fff" }}
-                            activeDot={{ r: 8, fill: darkMode ? "#818CF8" : "#6366F1", strokeWidth: 0 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                          <svg className={`w-8 h-8 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
-                        <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>Aucune donnée disponible</p>
+                  {timeline_data.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={timeline_data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#374151" : "#f0f0f0"} vertical={false} />
+                        <XAxis dataKey="date" tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
+                        <YAxis tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
+                        <Tooltip content={<CustomTooltip darkMode={darkMode} />} />
+                        <Line
+                          type="monotone"
+                          dataKey="count"
+                          name="Recommandations"
+                          stroke={darkMode ? "#818CF8" : "#6366F1"}
+                          strokeWidth={3}
+                          dot={{ r: 6, fill: darkMode ? "#818CF8" : "#6366F1", strokeWidth: 2, stroke: darkMode ? "#1F2937" : "#fff" }}
+                          activeDot={{ r: 8, fill: darkMode ? "#818CF8" : "#6366F1", strokeWidth: 0 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                        <svg className={`w-8 h-8 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                       </div>
-                    )}
-                  </div>
+                      <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>Aucune donnée disponible</p>
+                    </div>
+                  )}
+                </div>
                 </div>
               </div>
             </div>
@@ -947,7 +1168,7 @@ function Client() {
                   <tbody className={`divide-y ${darkMode ? 'divide-gray-700 bg-gray-700/80' : 'divide-gray-200 bg-white'}`}>
                     {recommendations.map((rec) => (
                       <tr 
-                        key={rec.id} 
+                        key={`${rec.produit_recommande}-${rec.created_at}`}
                         className={`transition-colors duration-150 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-50'}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -1013,6 +1234,13 @@ function Client() {
         onClose={closeRecommendationModal}
         darkMode={darkMode}
       />
+      <RecommendationsListModal
+    recommendations={new_recommendations}
+    isOpen={isListModalOpen}
+    onClose={closeListModal}
+    onSelect={handleSelectRecommendation}
+    darkMode={darkMode}
+/>
     </div>
   );
 }

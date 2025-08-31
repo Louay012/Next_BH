@@ -37,20 +37,10 @@ export default function Dashboard() {
     setDarkMode(isDarkMode);
 
     // Charger les données depuis l'API Flask
-    axios.get("http://127.0.0.1:5000/resume_recommendations" )
-      .then((res) => {
-        // Pour le graphique "Tendances par date", qui n'est pas dans l'API,
-        // nous ajoutons des données factices pour que le graphique ne plante pas.
-        const augmentedData = {
-          ...res.data,
-          by_date: {
-            "2024-08-01": 8, "2024-08-02": 12, "2024-08-03": 15,
-            "2024-08-04": 10, "2024-08-05": 18, "2024-08-06": 14,
-            "2024-08-07": 8
-          }
-        };
-        setStats(augmentedData);
-      })
+     axios.get("http://127.0.0.1:5000/resume_recommendations")
+    .then((res) => {
+      setStats(res.data); // Use the real data from the API
+    })
       .catch((err) => {
         console.error("Erreur lors du chargement des données depuis l'API :", err);
         // Utiliser les données statiques de secours si l'API n'est pas accessible
@@ -167,7 +157,7 @@ export default function Dashboard() {
                 <CardKPI title="Total des recommandations" value={stats.total_recommendations} hint={`pour ${stats.clients_with_recommendations} clients`} color="bg-gradient-to-br from-indigo-600 to-indigo-800" darkMode={darkMode} />
                 <CardKPI title="Acceptées" value={stats.accepted} hint="Recommandations validées" color="bg-gradient-to-br from-emerald-300 to-emerald-500" darkMode={darkMode} />
                 <CardKPI title="Refusées" value={stats.refused} hint="Nécessite une révision" color="bg-gradient-to-br from-purple-500 to-purple-700" darkMode={darkMode} />
-                <CardKPI title="En attente" value={stats.pending} hint="En cours de traitement" color="bg-gradient-to-br from-amber-400 to-amber-600" darkMode={darkMode} />
+                <CardKPI title="En attente" value={stats.pending} hint="En cours de traitement" color="bg-gradient-to-br from-gray-400 to-gray-600" darkMode={darkMode} />
               </section>
 
               {/* Grille des graphiques */}
