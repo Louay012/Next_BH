@@ -59,8 +59,26 @@ def resume_recommandations():
         .astype(int)   # 🔥 conversion en int natif
         .to_dict()
     )
+        # Nombre de recommandations réalisées par jour
+    if "created_at" in df.columns:
+        df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
+        recos_par_jour = {
+            str(k): v
+            for k, v in (
+                df.dropna(subset=["created_at"])
+                .groupby(df["created_at"].dt.date)
+                .size()
+                .astype(int)
+                .to_dict()
+                .items()
+            )
+}
+    else:
+        recos_par_jour = {}
+
 
     return {
+        "by_date": recos_par_jour,
         "total_recommendations": total_recos,
         "clients_with_recommendations": clients_with_recos,
         "accepted": accepted,
@@ -110,7 +128,7 @@ def resume_recommandations_client(client_id: str):
 
     # Top 5 des produits acceptés
     top5_accepted = (
-        client_df[client_df["status"] == "accepté"]["recommendation.produit_recommande"]
+        client_df[client_df["status"] == "accepted"]["recommendation.produit_recommande"]
         .value_counts()
         .head(5)
         .astype(int)   # 🔥 conversion en int natif
@@ -123,6 +141,9 @@ def resume_recommandations_client(client_id: str):
             ["recommendation.produit_recommande",
              "status",
              "recommendation.raisonnement",
+             "recommendation.score_pertinence",
+             "recommendation.branche",
+             "created_at",
              "recommendation.pitch"]
         ]
         .applymap(lambda x: None if pd.isna(x) else x)  # Replace NaN with None

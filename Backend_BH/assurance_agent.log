@@ -1,0 +1,94 @@
+2025-09-01 11:50:49,853 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 11:50:49,859 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 11:50:51,421 - root - ERROR - Erreur de connexion IMAP: b'[AUTHENTICATIONFAILED] Invalid credentials (Failure)'
+2025-09-01 11:50:51,421 - root - ERROR - Impossible de se connecter au serveur email
+2025-09-01 11:51:58,410 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 11:51:58,415 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 11:51:59,799 - root - ERROR - Erreur de connexion IMAP: b'[AUTHENTICATIONFAILED] Invalid credentials (Failure)'
+2025-09-01 11:51:59,800 - root - ERROR - Impossible de se connecter au serveur email
+2025-09-01 11:57:57,507 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 11:57:57,513 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 11:57:58,552 - root - INFO - Connexion IMAP réussie
+2025-09-01 11:57:58,566 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-01 11:57:58,571 - apscheduler.scheduler - INFO - Added job "EmailReceiver.check_responses" to job store "default"
+2025-09-01 11:57:58,572 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-01 11:57:58,573 - root - INFO - Agent démarré. Vérification toutes les 5 minutes...
+2025-09-01 11:57:58,574 - root - INFO - Appuyez sur Ctrl+C pour arrêter
+2025-09-01 11:57:59,262 - root - INFO - Found 11794 new emails
+2025-09-01 11:58:00,032 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:00,446 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:00,839 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:01,395 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:01,849 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:02,336 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:02,761 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:03,159 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:03,530 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:03,936 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:04,307 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:04,704 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:05,121 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:05,581 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:06,093 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:06,481 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:07,049 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:07,461 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:08,032 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:08,650 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:09,032 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:09,428 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:09,933 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:10,369 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:10,943 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:11,500 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:11,904 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:12,429 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:12,940 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:13,444 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:13,829 - root - ERROR - Erreur MongoDB lors de la récupération: command find requires authentication, full error: {'ok': 0.0, 'errmsg': 'command find requires authentication', 'code': 13, 'codeName': 'Unauthorized'}
+2025-09-01 11:58:14,102 - root - INFO - Arrêt de l'agent...
+2025-09-01 11:58:14,102 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-09-01 11:58:14,103 - root - ERROR - Erreur lors de la fermeture: command: LOGOUT => unexpected response: b'ng: 15px 20px=21important; =7D'
+2025-09-01 11:58:14,103 - root - INFO - Agent arrêté
+2025-09-01 12:23:12,239 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 12:24:07,558 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 12:27:11,091 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 12:27:37,715 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 12:27:37,723 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 12:27:38,513 - root - INFO - Connexion IMAP réussie
+2025-09-01 12:27:38,515 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-01 12:27:38,517 - apscheduler.scheduler - INFO - Added job "EmailReceiver.check_responses" to job store "default"
+2025-09-01 12:27:38,518 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-01 12:27:38,518 - root - INFO - Agent démarré. Vérification toutes les 5 minutes...
+2025-09-01 12:27:38,518 - root - INFO - Appuyez sur Ctrl+C pour arrêter
+2025-09-01 12:27:39,184 - root - INFO - Found 11760 new emails
+2025-09-01 12:30:07,799 - root - INFO - Arrêt de l'agent...
+2025-09-01 12:30:07,801 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-09-01 12:30:07,801 - root - ERROR - Erreur lors de la fermeture: command: LOGOUT => unexpected response: b'sqncQc8DtzVc6WgHh37MX7O2hfspfCLwz8K9G1vUtc1W'
+2025-09-01 12:30:07,802 - root - INFO - Agent arrêté
+2025-09-01 12:50:12,363 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 12:50:12,373 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 12:50:13,263 - root - INFO - Connexion IMAP réussie
+2025-09-01 12:50:13,271 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-01 12:50:13,274 - apscheduler.scheduler - INFO - Added job "EmailReceiver.check_responses" to job store "default"
+2025-09-01 12:50:13,275 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-01 12:50:13,277 - root - INFO - Agent démarré. Vérification toutes les 5 minutes...
+2025-09-01 12:50:13,278 - root - INFO - Appuyez sur Ctrl+C pour arrêter
+2025-09-01 12:50:13,972 - root - INFO - Found 11570 new emails
+2025-09-01 12:50:18,475 - root - INFO - Arrêt de l'agent...
+2025-09-01 12:50:18,475 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-09-01 12:50:18,485 - root - ERROR - Erreur lors de la fermeture: command: LOGOUT => unexpected response: b'rhrcFAbgxXiRGUtOWh5hCUwwPB675rghv5JcppS'
+2025-09-01 12:50:18,485 - root - INFO - Agent arrêté
+2025-09-01 13:06:59,314 - root - INFO - Démarrage de l'agent de gestion des réponses emails...
+2025-09-01 13:06:59,322 - root - INFO - Connexion à MongoDB réussie
+2025-09-01 13:07:00,291 - root - INFO - Connexion IMAP réussie
+2025-09-01 13:07:00,295 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-09-01 13:07:00,300 - apscheduler.scheduler - INFO - Added job "EmailReceiver.check_responses" to job store "default"
+2025-09-01 13:07:00,300 - apscheduler.scheduler - INFO - Scheduler started
+2025-09-01 13:07:00,302 - root - INFO - Agent démarré. Vérification toutes les 5 minutes...
+2025-09-01 13:07:00,303 - root - INFO - Appuyez sur Ctrl+C pour arrêter
+2025-09-01 13:07:01,003 - root - INFO - Found 11559 new emails
+2025-09-01 13:07:05,202 - root - INFO - Arrêt de l'agent...
+2025-09-01 13:07:05,202 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-09-01 13:07:05,202 - root - ERROR - Erreur lors de la fermeture: command: LOGOUT => unexpected response: b'  ry9ZVs37wPsA8u75L6o4OCT1Vpr9rH0z+LKXyxvOe21khzCB/WZs3AJm14pcNItiq6iz'
+2025-09-01 13:07:05,202 - root - INFO - Agent arrêté

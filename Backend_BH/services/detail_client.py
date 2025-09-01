@@ -3,7 +3,7 @@ import pandas as pd
 
 import numpy as np
 
-XLSX_PATH = "C:/Users/louay/OneDrive/Desktop/NEXT_BH/Backend_BH/BD/new_data.xlsx"
+XLSX_PATH = "D:/fezaimohamedelamine/ia_genrative/BHAssurance/BD/new_data.xlsx"
 def to_native_types(obj):
     """Convertit les types numpy/pandas en types Python natifs (JSON-friendly)."""
     if isinstance(obj, dict):

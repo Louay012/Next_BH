@@ -47,6 +47,23 @@ def get_recommendations_list_route(client_ref):
         return jsonify(recommendations)
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})    
+    
+
+#pour l'agent sinistre
+@app.route('/sinistres_client/<ref_personne>', methods=['GET'])
+def get_sinistres_client(ref_personne):
+    from tools.agentSinistre import get_agent_sinistres
+    details = get_agent_sinistres(ref_personne)
+    return jsonify(details)
+
+#appel agent avec prériiorité des clients
+@app.route('/appel_agent', methods=['GET'])
+def appel_agent():
+    from services.recommendationAgent import get_agent
+    get_agent()
+    return jsonify({"status": "success", "message": "Agent exécuté avec succès"})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

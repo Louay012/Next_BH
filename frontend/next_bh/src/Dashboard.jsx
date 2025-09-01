@@ -77,7 +77,8 @@ export default function Dashboard() {
     { name: 'Refusées', value: stats.refused },
     { name: 'En attente', value: stats.pending }
   ];
-
+  console.log("Status Data for PieChart:", statusData); // Log for debugging
+  const nonZeroStatus = statusData.filter(d => d.value > 0);
   // Pour le BarChart : Top 5 des produits recommandés
   const topRecommendedData = Object.entries(stats.top5_recommended).map(([name, value]) => ({ name, value }));
 
@@ -167,11 +168,11 @@ export default function Dashboard() {
                   <div className="flex-1">
                     <div className={`${cardClass} rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full`}>
                       <h3 className={`text-xl font-bold ${textClass} mb-6`}>Statut des recommandations</h3>
-                      <div className="h-[calc(100%-80px)]">
+                      <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
                             <Pie
-                              data={statusData}
+                              data={nonZeroStatus}
                               dataKey="value"
                               nameKey="name"
                               cx="50%"

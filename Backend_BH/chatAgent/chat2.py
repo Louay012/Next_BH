@@ -398,7 +398,7 @@ async def chat_with_agent(request: ChatRequest):
                 print("pas de réponse du LLM de secours 1, on bascule vers le LLM de secours 2...")
                 try:
                     
-                    """llm = ChatOllama(
+                    llm = ChatOllama(
                     model="llama3.1:8b",  # Modèle adapté à ta GTX + CPU i5
                     temperature=0,         # Réponses déterministes
                     base_url="http://localhost:11434"
@@ -406,7 +406,7 @@ async def chat_with_agent(request: ChatRequest):
                     tools = [recommender_tool, update_status, save_recommendation]
                     agent = create_react_agent(llm, tools=tools)
                     response = agent.invoke({"messages": conversation_history})
-                    assistant_message = response["messages"][-1].content"""
+                    assistant_message = response["messages"][-1].content
 
                 except Exception as e3:
                     raise HTTPException(status_code=500, detail=f"Erreur LLM: {str(e3)}")

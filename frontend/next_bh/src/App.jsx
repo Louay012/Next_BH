@@ -4,6 +4,8 @@ import Chatbot from './Chatbot.jsx'; // Adjust path if necessary
 import './App.css'; // Keep for any global styles
 import Dashboard from './Dashboard.jsx'; 
 import Client from './Client.jsx';
+import ClientSinistres from './ClientsSinistres.jsx';
+
 function App() {
   return (
     <Router>
@@ -13,6 +15,7 @@ function App() {
           <Route path="/chatbot/:client_ref" element={<Chatbot />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/client" element={<Client />} />
+          <Route path="/sinistres" element={<ClientSinistres/>} />
 
         </Routes>
       </div>

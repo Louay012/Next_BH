@@ -146,7 +146,7 @@ const staticData = {
       '61-80': 1,
       '81-100': 6
     },
-    timeline_data: [
+    timelineDataArray: [
       { date: '2025-08-16', count: 5 },
       { date: '2025-08-17', count: 2 }
     ]
@@ -204,24 +204,24 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 // Modern Recommendation Modal
 const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
   if (!isOpen) return null;
-  
+  console.log(recommendation)
   return (
     <div className="fixed inset-0 backdrop-blur-md bg-black/30 flex items-center justify-center z-50 p-4">
       <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 animate-scaleIn`}>
         <div className="p-8">
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h2 className={`text-3xl font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'} mb-2`}>{recommendation.produit_recommande}</h2>
+              <h2 className={`text-3xl font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'} mb-2`}>{recommendation["recommendation.produit_recommande"]}</h2>
               <div className="flex items-center space-x-3">
                 <span className={`px-3 py-1 text-sm font-bold rounded-full ${
                   recommendation.score_value >= 80 ? 'bg-green-100 text-green-800' : 
                   recommendation.score_value >= 60 ? 'bg-yellow-100 text-yellow-800' : 
                   'bg-red-100 text-red-800'
                 }`}>
-                  Score: {recommendation.score_pertinence}
+                  Score: {recommendation["recommendation.score_pertinence"]}
                 </span>
                 <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-sm font-bold rounded-full">
-                  {recommendation.branche}
+                  {recommendation["recommendation.branche"]}
                 </span>
               </div>
             </div>
@@ -245,11 +245,11 @@ const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
               Raisonnement
             </h3>
             <div className={`${darkMode ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200'} p-6 rounded-2xl border backdrop-blur-sm`}>
-              <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{recommendation.raisonnement}</p>
+              <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{recommendation["recommendation.raisonnement"]}</p>
             </div>
           </div>
 
-          {recommendation.pitch && <div className="mb-8">
+          {recommendation["recommendation.pitch"] && <div className="mb-8">
             <h3 className={`text-xl font-bold mb-4 flex items-center ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${darkMode ? 'bg-indigo-900/30' : 'bg-indigo-100'}`}>
                 <svg className={`w-5 h-5 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -259,7 +259,7 @@ const RecommendationModal = ({ recommendation, isOpen, onClose, darkMode }) => {
               Argumentaire de vente
             </h3>
             <div className={`${darkMode ? 'bg-indigo-900/20 border-indigo-700' : 'bg-indigo-50 border-indigo-100'} p-6 rounded-2xl border backdrop-blur-sm`}>
-              <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'} whitespace-pre-line`}>{recommendation.pitch}</p>
+              <p className={`leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'} whitespace-pre-line`}>{recommendation["recommendation.pitch"]}</p>
             </div>
           </div>}
 
@@ -460,7 +460,7 @@ function Client() {
                 //const data = response.data; // Axios automatically parses JSON responses
                 const data={
             "data": {
-                "response": "\nJe vais proc\u00e9der \u00e0 une analyse compl\u00e8te du client et \u00e0 la recommandation de produits d'assurance adapt\u00e9s, m\u00eame si l'outil de recherche rencontre une erreur technique.\n\n## Analyse d\u00e9taill\u00e9e du client REF 715\n\n### Informations du client :\n- **R\u00e9f\u00e9rence :** 715\n- **Nom :** Personne_00001\n- **\u00c2ge :** 60 ans (n\u00e9 le 28/09/1964)\n- **Sexe :** Masculin\n- **Situation familiale :** Mari\u00e9\n- **Profession :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste\n- **Secteur d'activit\u00e9 :** Cadres et professions intellectuelles sup\u00e9rieures\n\n### Situation contractuelle actuelle :\n- **4 contrats automobiles** tous r\u00e9sili\u00e9s\n- **Total capital assur\u00e9 :** 83 750 \u20ac\n- **Sinistres :** 1 sinistre automobile historique (2002) de 2 037.34 \u20ac\n\n### Opportunit\u00e9s identifi\u00e9es par le syst\u00e8me :\n1. **Manque de produit sant\u00e9** \u2192 Recommandation : ASSURANCE SANTE\n2. **Manque de produit vie** \u2192 Recommandation : ASSURANCE VIE\n\n## Raisonnement m\u00e9tier d\u00e9taill\u00e9\n\n### \u00c9tape 1 : Analyse du profil client\n- **Profil professionnel :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste de 60 ans\n- **Situation familiale :** Mari\u00e9 (responsabilit\u00e9 familiale)\n- **\u00c2ge :** 60 ans (approche de la retraite)\n- **Besoins sp\u00e9cifiques :** Protection professionnelle, sant\u00e9 familiale, pr\u00e9paration retraite\n\n### \u00c9tape 2 : \u00c9valuation des risques\n1. **Risque professionnel :** Exercice de la m\u00e9decine n\u00e9cessite une protection adapt\u00e9e\n2. **Risque sant\u00e9 :** \u00c2ge avanc\u00e9, besoins m\u00e9dicaux importants\n3. **Risque vie :** Protection familiale en cas de d\u00e9c\u00e8s\n4. **Risque pr\u00e9voyance :** Incapacit\u00e9 de travail ou invalidit\u00e9\n\n### \u00c9tape 3 : Analyse des lacunes contractuelles\n- **Aucune assurance sant\u00e9 :** Risque important pour un professionnel de sant\u00e9\n- **Aucune assurance vie :** Non-protection des ayants droit\n- **Contrats automobiles tous r\u00e9sili\u00e9s :** Possible historique de sinistres ou non-paiements\n\n### \u00c9tape 4 : D\u00e9finition des besoins prioritaires\n1. **Assurance sant\u00e9 professionnelle :** Pour couvrir les risques li\u00e9s \u00e0 l'exercice m\u00e9dical\n2. **Assurance vie :** Pour prot\u00e9ger la famille en cas de d\u00e9c\u00e8s\n3. **Pr\u00e9voyance professionnelle :** Pour couvrir les risques d'incapacit\u00e9 de travail\n\n## Recommandations de produits\n\nMalgr\u00e9 l'erreur technique sur l'outil de recherche, je peux baser mes recommandations sur les opportunit\u00e9s identifi\u00e9es par le syst\u00e8me et les r\u00e8gles m\u00e9tier :\n\n### Produit 1 : Assurance Sant\u00e9 Professionnelle\n- **Branche :** Sant\u00e9\n- **Raison :** M\u00e9decin lib\u00e9ral ayant besoin d'une protection sant\u00e9 adapt\u00e9e \u00e0 sa profession\n- **Score de pertinence :** 95/100\n- **Justification :** Essentiel pour un professionnel de sant\u00e9 de 60 ans, couvre les risques professionnels et personnels\n\n### Produit 2 : Assurance Vie\n- **Branche :** Vie\n- **Raison :** Mari\u00e9 ayant besoin de prot\u00e9ger sa famille\n- **Score de pertinence :** 90/100\n- **Justification :** Protection des ayants droit, adaptation \u00e0 l'\u00e2ge et situation familiale\n\n### Produit 3 : Pr\u00e9voyance Professionnelle\n- **Branche :** Pr\u00e9voyance\n- **Raison :** Profession \u00e0 risque n\u00e9cessitant une couverture d'incapacit\u00e9\n- **Score de pertinence :** 85/100\n- **Justification :** Couvre les risques professionnels sp\u00e9cifiques aux m\u00e9decins lib\u00e9raux\n\n[\n  {\n    \"raisonnement\": \"Client de 60 ans, m\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste, mari\u00e9. Aucune assurance sant\u00e9 d\u00e9tect\u00e9e alors que c'est essentiel pour un professionnel de sant\u00e9. Risque professionnel important et besoins de sant\u00e9 personnels non couverts.\",\n    \"produit_recommande\": \"Assurance Sant\u00e9 Professionnelle\",\n    \"branche\": \"Sant\u00e9\",\n    \"score_pertinence\": \"95/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"Mari\u00e9 de 60 ans sans protection familiale. Aucune assurance vie d\u00e9tect\u00e9e alors que c'est crucial pour prot\u00e9ger les ayants droit. Situation familiale n\u00e9cessitant une couverture en cas de d\u00e9c\u00e8s.\",\n    \"produit_recommande\": \"Assurance Vie\",\n    \"branche\": \"Vie\",\n    \"score_pertinence\": \"90/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"M\u00e9decin lib\u00e9ral de 60 ans avec risques professionnels sp\u00e9cifiques. Aucune pr\u00e9voyance d\u00e9tect\u00e9e. Besoin de couverture en cas d'incapacit\u00e9 de travail ou d'invalidit\u00e9 li\u00e9e \u00e0 l'exercice m\u00e9dical.\",\n    \"produit_recommande\": \"Pr\u00e9voyance Professionnelle\",\n    \"branche\": \"Pr\u00e9voyance\",\n    \"score_pertinence\": \"85/100\",\n    \"errors\": \"\"\n  }\n]"
+            "response": "\nJe vais proc\u00e9der \u00e0 une analyse compl\u00e8te du client et \u00e0 la recommandation de produits d'assurance adapt\u00e9s, m\u00eame si l'outil de recherche rencontre une erreur technique.\n\n## Analyse d\u00e9taill\u00e9e du client REF 715\n\n### Informations du client :\n- **R\u00e9f\u00e9rence :** 715\n- **Nom :** Personne_00001\n- **\u00c2ge :** 60 ans (n\u00e9 le 28/09/1964)\n- **Sexe :** Masculin\n- **Situation familiale :** Mari\u00e9\n- **Profession :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste\n- **Secteur d'activit\u00e9 :** Cadres et professions intellectuelles sup\u00e9rieures\n\n### Situation contractuelle actuelle :\n- **4 contrats automobiles** tous r\u00e9sili\u00e9s\n- **Total capital assur\u00e9 :** 83 750 \u20ac\n- **Sinistres :** 1 sinistre automobile historique (2002) de 2 037.34 \u20ac\n\n### Opportunit\u00e9s identifi\u00e9es par le syst\u00e8me :\n1. **Manque de produit sant\u00e9** \u2192 Recommandation : ASSURANCE SANTE\n2. **Manque de produit vie** \u2192 Recommandation : ASSURANCE VIE\n\n## Raisonnement m\u00e9tier d\u00e9taill\u00e9\n\n### \u00c9tape 1 : Analyse du profil client\n- **Profil professionnel :** M\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste de 60 ans\n- **Situation familiale :** Mari\u00e9 (responsabilit\u00e9 familiale)\n- **\u00c2ge :** 60 ans (approche de la retraite)\n- **Besoins sp\u00e9cifiques :** Protection professionnelle, sant\u00e9 familiale, pr\u00e9paration retraite\n\n### \u00c9tape 2 : \u00c9valuation des risques\n1. **Risque professionnel :** Exercice de la m\u00e9decine n\u00e9cessite une protection adapt\u00e9e\n2. **Risque sant\u00e9 :** \u00c2ge avanc\u00e9, besoins m\u00e9dicaux importants\n3. **Risque vie :** Protection familiale en cas de d\u00e9c\u00e8s\n4. **Risque pr\u00e9voyance :** Incapacit\u00e9 de travail ou invalidit\u00e9\n\n### \u00c9tape 3 : Analyse des lacunes contractuelles\n- **Aucune assurance sant\u00e9 :** Risque important pour un professionnel de sant\u00e9\n- **Aucune assurance vie :** Non-protection des ayants droit\n- **Contrats automobiles tous r\u00e9sili\u00e9s :** Possible historique de sinistres ou non-paiements\n\n### \u00c9tape 4 : D\u00e9finition des besoins prioritaires\n1. **Assurance sant\u00e9 professionnelle :** Pour couvrir les risques li\u00e9s \u00e0 l'exercice m\u00e9dical\n2. **Assurance vie :** Pour prot\u00e9ger la famille en cas de d\u00e9c\u00e8s\n3. **Pr\u00e9voyance professionnelle :** Pour couvrir les risques d'incapacit\u00e9 de travail\n\n## Recommandations de produits\n\nMalgr\u00e9 l'erreur technique sur l'outil de recherche, je peux baser mes recommandations sur les opportunit\u00e9s identifi\u00e9es par le syst\u00e8me et les r\u00e8gles m\u00e9tier :\n\n### Produit 1 : Assurance Sant\u00e9 Professionnelle\n- **Branche :** Sant\u00e9\n- **Raison :** M\u00e9decin lib\u00e9ral ayant besoin d'une protection sant\u00e9 adapt\u00e9e \u00e0 sa profession\n- **Score de pertinence :** 95/100\n- **Justification :** Essentiel pour un professionnel de sant\u00e9 de 60 ans, couvre les risques professionnels et personnels\n\n### Produit 2 : Assurance Vie\n- **Branche :** Vie\n- **Raison :** Mari\u00e9 ayant besoin de prot\u00e9ger sa famille\n- **Score de pertinence :** 90/100\n- **Justification :** Protection des ayants droit, adaptation \u00e0 l'\u00e2ge et situation familiale\n\n### Produit 3 : Pr\u00e9voyance Professionnelle\n- **Branche :** Pr\u00e9voyance\n- **Raison :** Profession \u00e0 risque n\u00e9cessitant une couverture d'incapacit\u00e9\n- **Score de pertinence :** 85/100\n- **Justification :** Couvre les risques professionnels sp\u00e9cifiques aux m\u00e9decins lib\u00e9raux\n\n[\n  {\n    \"raisonnement\": \"Client de 60 ans, m\u00e9decin lib\u00e9ral g\u00e9n\u00e9raliste, mari\u00e9. Aucune assurance sant\u00e9 d\u00e9tect\u00e9e alors que c'est essentiel pour un professionnel de sant\u00e9. Risque professionnel important et besoins de sant\u00e9 personnels non couverts.\",\n    \"produit_recommande\": \"Assurance Sant\u00e9 Professionnelle\",\n    \"branche\": \"Sant\u00e9\",\n    \"score_pertinence\": \"95/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"Mari\u00e9 de 60 ans sans protection familiale. Aucune assurance vie d\u00e9tect\u00e9e alors que c'est crucial pour prot\u00e9ger les ayants droit. Situation familiale n\u00e9cessitant une couverture en cas de d\u00e9c\u00e8s.\",\n    \"produit_recommande\": \"Assurance Vie\",\n    \"branche\": \"Vie\",\n    \"score_pertinence\": \"90/100\",\n    \"errors\": \"\"\n  },\n  {\n    \"raisonnement\": \"M\u00e9decin lib\u00e9ral de 60 ans avec risques professionnels sp\u00e9cifiques. Aucune pr\u00e9voyance d\u00e9tect\u00e9e. Besoin de couverture en cas d'incapacit\u00e9 de travail ou d'invalidit\u00e9 li\u00e9e \u00e0 l'exercice m\u00e9dical.\",\n    \"produit_recommande\": \"Pr\u00e9voyance Professionnelle\",\n    \"branche\": \"Pr\u00e9voyance\",\n    \"score_pertinence\": \"85/100\",\n    \"errors\": \"\"\n  }\n]"
             },
             "status": "success"}
         console.log("Full backend response:", data); // Log the full response for debugging
@@ -518,13 +518,13 @@ const handleSubmit = async (e) => {
           refused_count: data.refused || 0,
           pending_count: data.pending || 0,
           branch_distribution: data.top5_recommended || {},
-          score_distribution: data.top5_accepted || {},
-          timeline_data: data.timeline_data || [] // Add timeline data if available
+          top5_accepted: data.top5_accepted || {}
         },
-        client_name: data.client_info?.name || "Inconnu",
+        client_name: data.client_info?.nom_prenom || "Inconnu",
         client_details: data.client_info || {}
       };
-
+      console.log("Mapped Data:", mappedData); // Log mapped data for debugging
+      
       setDashboard(mappedData); // Update state with mapped data
     } catch (error) {
       console.error("Erreur lors du chargement des données client :", error);
@@ -660,14 +660,21 @@ const handleSubmit = async (e) => {
     accepted_count = 0,
     refused_count = 0,
     pending_count = 0,
-    branch_distribution = {},
-    score_distribution = {},
-    timeline_data = []
+    branch_distribution = {}
   } = stats;
+  const timeline_data= recommendations.reduce((acc, rec) => {
+      if (!rec.created_at) return acc;
+      const date = new Date(rec.created_at).toISOString().slice(0, 10); // 'YYYY-MM-DD'
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {});
 
+  const timelineDataArray = Object.entries(timeline_data)
+  .map(([date, count]) => ({ date, count }))
+  .sort((a, b) => new Date(a.date) - new Date(b.date));
   const branchData = Object.entries(branch_distribution).map(([name, value]) => ({ name, value }));
-  const scoreData = Object.entries(score_distribution).map(([name, value]) => ({ name, value }));
   const chartColors = darkMode ? DARK_COLORS : COLORS;
+  const top5AcceptedData = Object.entries(stats.top5_accepted || {}).map(([name, value]) => ({ name, value }));
 
   // Prepare data for the new status chart (showing actual counts)
 // Prepare data for the radial bar chart
@@ -769,8 +776,8 @@ const handleSubmit = async (e) => {
                 {client_details && (
                   <>
                     <div className="text-center">
-                      <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Âge</p>
-                      <p className={`text-lg font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{client_details.age || '-'}</p>
+                      <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Date naissance</p>
+                      <p className={`text-lg font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{client_details.date_naissance || '-'}</p>
                     </div>
                     <div className="text-center">
                       <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Profession</p>
@@ -778,7 +785,7 @@ const handleSubmit = async (e) => {
                     </div>
                     <div className="text-center">
                       <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Statut</p>
-                      <p className={`text-lg font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{client_details.marital_status || '-'}</p>
+                      <p className={`text-lg font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{client_details.situation_familiale || '-'}</p>
                     </div>
                   </>
                 )}
@@ -1047,26 +1054,26 @@ const handleSubmit = async (e) => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                       </div>
-                      Scores de Pertinence
+                      Top 5 Produits Acceptés
                     </h3>
                     <div className={`px-2 py-1 rounded-full text-xs font-medium ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
-                      {scoreData.length} niveaux
+                      {top5AcceptedData.length} produits
                     </div>
                   </div>
                   <div className="h-64">
-                    {scoreData.length > 0 ? (
+                    {top5AcceptedData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={scoreData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <BarChart data={top5AcceptedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#374151" : "#f0f0f0"} vertical={false} />
                           <XAxis dataKey="name" tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
                           <YAxis tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
                           <Tooltip content={<CustomTooltip darkMode={darkMode} />} />
                           <Bar 
                             dataKey="value" 
-                            name="Recommandations" 
+                            name="Acceptés" 
                             radius={[6, 6, 0, 0]}
                           >
-                            {scoreData.map((entry, index) => (
+                            {top5AcceptedData.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
                             ))}
                           </Bar>
@@ -1097,13 +1104,13 @@ const handleSubmit = async (e) => {
                       Chronologie des Recommandations
                     </h3>
                     <div className={`px-2 py-1 rounded-full text-xs font-medium ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
-                      {timeline_data.length} jours
+                      {timelineDataArray.length} jours
                     </div>
                   </div>
                   <div className="h-64">
-                  {timeline_data.length > 0 ? (
+                  {timelineDataArray.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={timeline_data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <LineChart data={timelineDataArray} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#374151" : "#f0f0f0"} vertical={false} />
                         <XAxis dataKey="date" tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
                         <YAxis tick={{ fontSize: 12, fill: darkMode ? '#9CA3AF' : '#6B7280' }} />
@@ -1168,14 +1175,14 @@ const handleSubmit = async (e) => {
                   <tbody className={`divide-y ${darkMode ? 'divide-gray-700 bg-gray-700/80' : 'divide-gray-200 bg-white'}`}>
                     {recommendations.map((rec) => (
                       <tr 
-                        key={`${rec.produit_recommande}-${rec.created_at}`}
+                        key={`${rec["recommendation.produit_recommande"]}-${rec.created_at}`}
                         className={`transition-colors duration-150 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-50'}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{rec.produit_recommande}</div>
+                          <div className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{rec["recommendation.produit_recommande"]}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>{rec.branche}</div>
+                          <div className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>{rec["recommendation.branche"]}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm">
@@ -1184,7 +1191,7 @@ const handleSubmit = async (e) => {
                               rec.score_value >= 60 ? 'bg-yellow-100 text-yellow-800' : 
                               'bg-red-100 text-red-800'
                             }`}>
-                              {rec.score_pertinence}
+                              {rec["recommendation.score_pertinence"]}
                             </span>
                           </div>
                         </td>

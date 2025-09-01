@@ -13,6 +13,7 @@ from .search_tool2 import search_tool
 from .traduire_tool import translate
 from .generateToken import generate_token
 from .envoyerEmail import envoyer_email_complet
+from .analyseSinistres import get_sinistres_client
 
 #from pymongo import MongoClient
 
@@ -77,7 +78,7 @@ ref = "569003"
 
 
 # Outils
-tools = [analyseDB, search_tool]
+tools = [get_sinistres_client]
 
 # Fonction de logging
 def log_message(message, role="INFO"):
@@ -127,14 +128,9 @@ def get_llm_backup2():
         model="z-ai/glm-4.5-air:free",
         temperature=0.7,
     )
-def get_llm_ollama():
-    return ChatOllama(
-        model="llama3.1:8b",  # Modèle adapté à ta GTX + CPU i5
-        temperature=0,         # Réponses déterministes
-        base_url="http://localhost:11434",
-    )
 
-def get_recommendations(client_ref):
+
+def get_agent_sinistres(client_ref):
     llm = get_llm_deepseek()
     """"llm = ChatOllama(
     model="llama3.1:8b",  # Modèle adapté à ta GTX + CPU i5
@@ -142,51 +138,35 @@ def get_recommendations(client_ref):
     base_url="http://localhost:11434",
 )"""
     # Génération du token
-    client_ref="11152"
-    
+    #client_ref="12370"
     # Prompt
     prompt = [
     {
         "role": "system",
         "content": (
-            "Vous êtes un expert en assurance avec 30 ans d'expérience."
-            "Votre mission : analyser les données d'un client et, en suivant une logique métier, recommander un produit adapté à son profil."
-            "Vous devez obligatoirement effectuer un raisonnement explicite avant de choisir le produit final."
-            "Raisonnement attendu :"
-            " - Analyser le métier, l'âge, la situation familiale, les contrats déjà détenus, le mode de vie, et les risques probables... ."
-            " - Utiliser des règles métiers comme par exemple :"
-            "     * Un médecin n’ayant qu’un contrat auto → proposer une épargne retraite ou une prévoyance professionnelle."
-            "     * Un chauffeur voyageant beaucoup → proposer une assurance vie ou santé adaptée aux déplacements fréquents."
-            "     * Un commerçant avec une famille nombreuse → proposer une assurance santé familiale et une assurance prévoyance."
-            " - Justifier clairement la recommandation avant de l’annoncer."
-            "Étapes à suivre :"
-            "1. Appeler le tool analyseDB pour extraire les données du client."
-            "2. Faire une analyse et raisonnement basé sur ces données."
-            "3. Appeler le tool de search_tool pour obtenir la liste des produits a recommander."
-            "4. Sélectionner le produit final de la liste fournie par le tool search_tool en tenant compte du raisonnement et il faut que les caratéristiques du client respectent les exigences et les conditions du produit (je n'accepte pas un produit qui ne respecte pas les conditions du contrat) exempple un produit ou l'age n'accepte pas plus de 40 ans ... ."
-            "-si vous ne trouvez pas un produit adapté, répondez honnêtement que vous ne pouvez pas recommander de produit. et stoppez l'exécution."
-            "5. Construire un pitch personnalisé (au minimium 100 mots) convaincant sous forme d'un email ( je n'accepte pas autre forme que d'un email ) pour envoyer il faut qui est personnalisé et capable a convaincre le client du le produit choisi ."
-            "Si un problème survient, arrêter l'exécution et retourner un message d'erreur."
-            "Le résultat final doit etre sous Format de réponse attendu (en JSON) je n'accepte pas autre forme que :\n"
-                "{\n"
-                "  \"raisonnement\": \"...\",\n"
-                "  \"produit_recommande\": \"...\",\n"
-                "  \"branche\": \"...\",\n"
-                "  \"score_pertinence\": \".../100\",\n"
-                "  \"pitch\": \"...\",\n"
-                "  \"conditions_generales\": \"...\"\n"
-                "  \"donnees_manquantes\": \"...\",\n"
-                "  \"errors\": \"...\"\n"
-                "}"
+            "Vous êtes un expert en assurance spécialisé dans l'analyse des sinistres. "
+            "Votre mission : pour un client donné, utilisez le tool get_sinistres_client pour récupérer la liste des sinistres liés à son dernier contrat. "
+            "Analysez en détail les causes, circonstances et récurrences éventuelles de ces sinistres. "
+            "Réalisez un raisonnement explicite sur les causes probables, les facteurs aggravants ou récurrents, et proposez des pistes de prévention adaptées au profil du client. "
+            "Ensuite, rédigez un email personnalisé (minimum 100 mots) à destination du client, expliquant votre analyse, les causes identifiées, et des conseils concrets pour éviter de futurs sinistres. "
+            "L'email doit être clair, empathique, pédagogique et inciter le client à adopter de bonnes pratiques. "
+            "Si aucune donnée n'est trouvée, indiquez-le honnêtement dans l'email. "
+            "Le résultat final doit être au format JSON strictement, exemple :\n"
+            "{\n"
+            "  \"analyse\": \"...\",\n"
+            "  \"causes_probables\": \"...\",\n"
+            "  \"conseils_prevention\": \"...\",\n"
+            "  \"email\": \"...\",\n"
+            "  \"donnees_manquantes\": \"...\",\n"
+            "  \"errors\": \"...\"\n"
+            "}"
         )
     },
     {
         "role": "user",
         "content": (
-            f"recommander un produit d'assurance adapté au client qui il manque ."
-            f"à un client de référence ref = {client_ref} en utilisant les outils disponibles, "
-            "et expliquer la logique de choix étape par étape avant la réponse finale, "
-            "puis donner un score sur 100."
+            f"Pour le client de référence ref = {client_ref}, analyse les sinistres du dernier contrat en utilisant le tool get_sinistres_client. "
+            "Explique les causes, propose des conseils de prévention, puis génère un email détaillé pour le client."
         )
     }
     ]
@@ -214,15 +194,8 @@ def get_recommendations(client_ref):
                 log_message("Réponse obtenue depuis le LLM de secours 2 ✅", "SUCCESS")
             except Exception as e:
                 log_message(f"Erreur avec le LLM de secours 2: {e}", "ERROR")
-                log_message("bascule vers le LLM Ollama...", "WARNING")
-                try:
-                    llm = get_llm_ollama()
-                    agent = create_react_agent(llm, tools)
-                    result = agent.invoke({"messages": prompt})
-                    log_message("Réponse obtenue depuis Ollama ✅", "SUCCESS")
                 # Si toutes les tentatives échouent, retourner une erreur
-                except Exception as e:
-                    return
+                return
     
     # Extraction de la dernière réponse AI
     messages = result.get("messages", [])
@@ -241,20 +214,20 @@ def get_recommendations(client_ref):
                 
                     #response = json.loads(msg.content)
                     # Sauvegarde dans MongoDB
-                    recommendation_id = save_recommendation(client_ref, parsed_json, status)
+                    #recommendation_id = save_recommendation(client_ref, parsed_json, status)
                         
 
-                    parsed_json["recommendation_id"] = recommendation_id
+                    #parsed_json["recommendation_id"] = recommendation_id
                     # Génération du token
-                    client_token=generate_token(client_ref)
+                    #client_token=generate_token(client_ref)
                     # Génération du lien
-                    lien = f"http://localhost:5173/chatbot/{client_ref}"
-                    body_email = parsed_json.get("pitch", "")
-                    body_email += f"\n\nPour plus de détails, veuillez consulter le lien suivant : {lien}"
+                    #lien = f"http://localhost:5173/chatbot/{client_ref}"
+                    body_email = parsed_json.get("email", "")
+                    #body_email += f"\n\nPour plus de détails, veuillez consulter le lien suivant : {lien}"
                     #print(f"Body de l'email : {body_email}")
 
                     # Envoi de l'email
-                    if parsed_json.get("produit_recommande") not in [None, "", "Aucun produit adapté trouvé"]:
+                    if parsed_json.get("email") not in [None, "", "Aucun"]:
                         envoyer_email_complet(body_email, "fezaimohamedelamine@gmail.com")
                     else:
                         log_message("Aucun produit adapté trouvé, email non envoyé.", "INFO")

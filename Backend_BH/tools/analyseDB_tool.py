@@ -404,7 +404,7 @@ def analyseDB(
     Fonction principale pour exécuter l'analyse de la base de données client.
 
     """
-    XLSX_PATH = "C:/Users/louay/OneDrive/Desktop/NEXT_BH/Backend_BH/BD/new_data.xlsx"
+    XLSX_PATH = "D:/fezaimohamedelamine/ia_genrative/BHAssurance/BD/new_data.xlsx"
     out_path = "out"+ref + ".json"
 
     sheets = load_excel_sheets(XLSX_PATH)
