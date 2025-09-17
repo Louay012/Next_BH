@@ -64,6 +64,23 @@ def appel_agent():
     return jsonify({"status": "success", "message": "Agent exécuté avec succès"})
 
 
+@app.route('/list_accepted', methods=['GET'])
+def list_accepted():
+    from services.analyse import accepted_recommendations
+    accepted = accepted_recommendations()
+    return jsonify(accepted)
+
+@app.route('/list_refused', methods=['GET'])
+def list_refused():
+    from services.analyse import refused_recommendations
+    refused = refused_recommendations()
+    return jsonify(refused)
+
+@app.route('/list_pending', methods=['GET'])
+def list_pending():
+    from services.analyse import pending_recommendations
+    pending = pending_recommendations()
+    return jsonify(pending)
 
 if __name__ == '__main__':
     app.run(debug=True)

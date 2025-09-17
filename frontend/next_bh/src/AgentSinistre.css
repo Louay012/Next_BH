@@ -1,0 +1,291 @@
+/* src/components/AgentSinistre.css */
+.agent-sinistre {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.agent-sinistre-header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agent-sinistre-header h1 {
+  font-size: 24px;
+}
+
+.agent-sinistre-header .tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.agent-sinistre-header .tabs button {
+  padding: 10px 15px;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.agent-sinistre-header .tabs button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.agent-sinistre-header .tabs button.active {
+  background-color: white;
+  color: #2c3e50;
+}
+
+.agent-sinistre-header .tabs button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.agent-sinistre-main {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard Styles */
+.dashboard h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.claims-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.claim-card {
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.claim-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.claim-card.nouveau {
+  border-left: 4px solid #3498db;
+}
+
+.claim-card.en-cours {
+  border-left: 4px solid #f39c12;
+}
+
+.claim-card.traité {
+  border-left: 4px solid #2ecc71;
+}
+
+.claim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.claim-header h3 {
+  color: #2c3e50;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge.nouveau {
+  background-color: #3498db;
+  color: white;
+}
+
+.status-badge.en-cours {
+  background-color: #f39c12;
+  color: white;
+}
+
+.status-badge.traité {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.client-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.contract-id, .claim-date {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 5px;
+}
+
+.claim-desc {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.claim-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.severity {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.severity-élevé {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.severity-moyen {
+  background-color: #f39c12;
+  color: white;
+}
+
+.severity-faible {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.contract-type {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+/* Analysis Styles */
+.analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  padding: 8px 15px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.claim-details {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.claim-details h3 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.claim-details p {
+  margin-bottom: 5px;
+}
+
+.analysis-result {
+  margin-bottom: 30px;
+}
+
+.analysis-result h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.analysis-result h4 {
+  color: #34495e;
+  margin: 15px 0 8px 0;
+}
+
+.procedures ol {
+  margin-left: 20px;
+}
+
+.procedures li {
+  margin-bottom: 5px;
+}
+
+.email-section {
+  margin-top: 30px;
+}
+
+.email-section h3 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.email-section textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  margin-bottom: 15px;
+  resize: vertical;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #219653;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .agent-sinistre-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .claims-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}

@@ -38,7 +38,7 @@ try:
     def save_recommendation(client_ref, recommendation_data, status):
         client = get_mongodb_client()
         db = client[MONGODB_DBNAME]
-        collection = db["client_recommendations_list"]
+        collection = db["client_recommendations_list"]  
         
         document = {
             "client_ref": client_ref,
@@ -69,7 +69,7 @@ if not OPENROUTER_API_KEY:
 
 
 
-#ref = "13354"
+ref = "13354"
 
 
 # Prompt principal
@@ -130,79 +130,13 @@ def get_llm_backup2():
 
 def get_recommendations_list(client_ref):
     llm = get_llm_deepseek()
-    # Prompt setup
-    prompt = [
-        {
-            "role": "system",
-            "content": (
-                "Vous êtes un expert en assurance avec 30 ans d'expérience."
-                "Votre mission : analyser les données d'un client et, en suivant une logique métier, recommander un produit adapté à son profil."
-                "Le résultat final doit être sous le format JSON suivant :\n"
-                "[{\n"
-                "  \"raisonnement\": \"...\",\n"
-                "  \"produit_recommande\": \"...\",\n"
-                "  \"branche\": \"...\",\n"
-                "  \"score_pertinence\": \".../100\",\n"
-                "  \"errors\": \"...\"\n"
-                "}]\n"
-            )
-        },
-        {
-            "role": "user",
-            "content": (
-                f"Recommander un produit d'assurance adapté au client de référence ref = {client_ref} "
-                "en utilisant les outils disponibles, et expliquer la logique de choix étape par étape avant la réponse finale."
-            )
-        }
-    ]
-    agent = create_react_agent(llm, tools)
-
-    try:
-        log_message("Envoi de la requête à Deepseek...", "INFO")
-        result = agent.invoke({"messages": prompt})
-        log_message("Réponse obtenue depuis Deepseek ✅", "SUCCESS")
-    except Exception as e:
-        log_message(f"Erreur avec Deepseek : {e}", "WARNING")
-        log_message("Bascule vers le LLM de secours...", "WARNING")
-        llm = get_llm_backup()
-        agent = create_react_agent(llm, tools)
-        try:
-            result = agent.invoke({"messages": prompt})
-            log_message("Réponse obtenue depuis le LLM de secours ✅", "SUCCESS")
-        except Exception as e:
-            log_message(f"Erreur avec le LLM de secours : {e}", "ERROR")
-            return {"status": "error", "message": "Erreur lors de la génération des recommandations."}
-
-    # Extract the last AI response
-    messages = result.get("messages", [])
-    for msg in reversed(messages):
-        if hasattr(msg, "content"):
-            try:
-                response_text = msg.content
-                # Extract JSON array from the response
-                json_match = re.search(r"\[.*\]", response_text, re.DOTALL)
-                if json_match:
-                    recommendations = json.loads(json_match.group(0))
-                    return {
-                        "status": "success",
-                        "data": recommendations
-                    }
-                else:
-                    log_message("Aucun tableau JSON valide trouvé dans la réponse.", "ERROR")
-                    return {"status": "error", "message": "Aucun tableau JSON valide trouvé dans la réponse."}
-            except json.JSONDecodeError as e:
-                log_message(f"Erreur de parsing JSON : {e}", "ERROR")
-                return {"status": "error", "message": "Erreur de parsing JSON."}
-
-    return {"status": "error", "message": "Aucune réponse valide trouvée."}
-    llm = get_llm_deepseek()
     """"llm = ChatOllama(
     model="llama3.1:8b",  # Modèle adapté à ta GTX + CPU i5
     temperature=0,         # Réponses déterministes
     base_url="http://localhost:11434",
 )"""
     # Génération du token
-    client_ref="12137"
+    #client_ref="12137"
     
     # Prompt
     prompt = [
@@ -290,7 +224,7 @@ def get_recommendations_list(client_ref):
                     body_email = ""   # initialisation par défaut
                     response_text = msg.content
                     parsed_json = extract_json(response_text)
-                    status= "email envoyé avec succès"
+                    status= "pending"
                     #response = json.loads(msg.content)
                     # Sauvegarde dans MongoDB
                     recommendation_id = save_recommendation(ref, parsed_json, status)

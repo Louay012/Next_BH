@@ -162,3 +162,91 @@ def resume_recommandations_client(client_id: str):
         "recommendations_details": recommandations_details,
         "client_info": client_info
     }
+
+
+
+def accepted_recommendations():
+    """
+    Retourne :
+    - Le total des recommandations acceptées
+    - La liste des recommandations acceptées triées par date (desc)
+    """
+    df = load_data(get_mongo_collection())
+
+    # Vérifier la présence des colonnes
+    required_cols = ["status", "client_ref", "recommendation.produit_recommande", "created_at"]
+    for col in required_cols:
+        if col not in df.columns:
+            raise ValueError(f"Colonne manquante dans MongoDB : {col}")
+
+    # Filtrer uniquement les 'accepted'
+    df = df[df["status"] == "accepted"].copy()
+
+    # Conversion des dates
+    df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
+
+    # Trier par date DESC
+    df = df.sort_values(by="created_at", ascending=False)
+
+    # Construire la liste de résultats
+    recos = df[["client_ref", "recommendation.produit_recommande", "created_at"]].to_dict(orient="records")
+
+    return {
+        "total_accepted": len(recos),
+        "accepted_list": recos
+    }
+
+def refused_recommendations():
+    """
+    Retourne :
+    - Le total des recommandations refusées
+    - La liste des recommandations refusées triées par date (desc)
+    """
+    df = load_data(get_mongo_collection())
+
+    # Vérifier la présence des colonnes
+    required_cols = ["status", "client_ref", "recommendation.produit_recommande", "created_at"]
+    for col in required_cols:
+        if col not in df.columns:
+            raise ValueError(f"Colonne manquante dans MongoDB : {col}")
+
+    # Filtrer uniquement les 'refused'
+    df = df[df["status"] == "refused"].copy()
+
+    # Conversion des dates
+    df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
+
+    # Trier par date DESC
+    df = df.sort_values(by="created_at", ascending=False)
+
+    # Construire la liste de résultats
+    recos = df[["client_ref", "recommendation.produit_recommande", "created_at"]].to_dict(orient="records")
+
+    return {
+        "total_refused": len(recos),
+        "refused_list": recos
+    }
+
+
+def pending_recommendations():
+    df = load_data(get_mongo_collection())
+
+    required_cols = ["status", "client_ref", "recommendation.produit_recommande", "created_at"]
+    for col in required_cols:
+        if col not in df.columns:
+            raise ValueError(f"Colonne manquante dans MongoDB : {col}")
+
+    df = df[df["status"] == "pending"].copy()
+    df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
+
+    # Remplacer NaN par chaîne vide
+    df["recommendation.produit_recommande"] = df["recommendation.produit_recommande"].fillna("")
+
+    df = df.sort_values(by="created_at", ascending=False)
+
+    recos = df[["client_ref", "recommendation.produit_recommande", "created_at"]].to_dict(orient="records")
+
+    return {
+        "total_pending": len(recos),
+        "pending_list": recos
+    }

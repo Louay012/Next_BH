@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import NavbarSection from "./NavbarSection"; // si tu le mets dans un fichier séparé
 import {
   PieChart, Pie, Cell, Tooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   LineChart, Line, ResponsiveContainer
 } from "recharts";
+
+import AcceptedRecommendations from "./AcceptedRecommendations";
 
 // Palettes de couleurs modernes
 const COLORS = [
@@ -102,29 +106,14 @@ export default function Dashboard() {
 
   return (
     <div className={`min-h-screen ${bgClass} p-8 transition-all duration-500`}>
-      <div className="max-w-[1400px] mx-auto">
+      
+      <div className="max-w-[1400px] mx-auto pt-10">
         <div className={`${mainCardClass} rounded-3xl overflow-hidden border transition-all duration-300 hover:shadow-2xl`}>
           <div className="flex flex-col lg:flex-row">
-            <main className="flex-1 p-6">
+            <main className="flex-1 p-6 ">
               <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
                 {/* ... (le reste du header reste identique) ... */}
-                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-                  <div className="relative w-full sm:w-auto">
-                    <input 
-                      placeholder="Rechercher des recommandations..." 
-                      className={`pl-12 pr-4 py-3 rounded-2xl border ${inputClass} text-sm w-full sm:w-96 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 shadow-sm`} 
-                    />
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className={`text-sm font-medium ${badgeClass} px-4 py-2 rounded-full flex items-center gap-2`}>
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    Aperçu
-                  </div>
-                </div>
+                 
                 <div className="flex items-center gap-4">
                   <button className={`px-5 py-2.5 cursor-pointer rounded-2xl border ${darkMode ? 'border-slate-600 bg-slate-700/50 text-slate-200' : 'border-slate-200 bg-white text-slate-700'} text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all duration-300 shadow-sm flex items-center gap-2`}>
                    
@@ -135,30 +124,16 @@ export default function Dashboard() {
                   </button>
                   
                   {/* Theme selector */}
-                  <button 
-                    onClick={toggleDarkMode}
-                    className={`p-3 rounded-full ${darkMode ? 'bg-gradient-to-br from-amber-200 to-gray-200 text-slate-900' : 'bg-gradient-to-br from-slate-800 to-slate-900 text-amber-200'} transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105`}
-                    aria-label="Basculer le thème"
-                  >
-                    {darkMode ? (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
-                     ) : (
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                      </svg>
-                     )}
-                  </button>
+                  
                 </div>
               </header>
 
               {/* Indicateurs clés (KPIs) */}
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 <CardKPI title="Total des recommandations" value={stats.total_recommendations} hint={`pour ${stats.clients_with_recommendations} clients`} color="bg-gradient-to-br from-indigo-600 to-indigo-800" darkMode={darkMode} />
-                <CardKPI title="Acceptées" value={stats.accepted} hint="Recommandations validées" color="bg-gradient-to-br from-emerald-300 to-emerald-500" darkMode={darkMode} />
-                <CardKPI title="Refusées" value={stats.refused} hint="Nécessite une révision" color="bg-gradient-to-br from-purple-500 to-purple-700" darkMode={darkMode} />
-                <CardKPI title="En attente" value={stats.pending} hint="En cours de traitement" color="bg-gradient-to-br from-gray-400 to-gray-600" darkMode={darkMode} />
+                <CardKPI title="Acceptées" value={stats.accepted} hint="Recommandations validées" color="bg-gradient-to-br from-emerald-300 to-emerald-500" darkMode={darkMode} to="/list_accepted"/>
+                <CardKPI title="Refusées" value={stats.refused} hint="Nécessite une révision" color="bg-gradient-to-br from-purple-500 to-purple-700" darkMode={darkMode} to="/list_refused" />
+                <CardKPI title="En attente" value={stats.pending} hint="En cours de traitement" color="bg-gradient-to-br from-gray-400 to-gray-600" darkMode={darkMode} to="/list_pending" />
               </section>
 
               {/* Grille des graphiques */}
@@ -262,13 +237,20 @@ export default function Dashboard() {
 }
 
 // Le composant CardKPI reste identique
-function CardKPI({ title, value, hint, color, darkMode }) {
-  return (
-    <div className={`rounded-3xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${color} overflow-hidden relative`}>
+function CardKPI({ title, value, hint, color, darkMode, to }) {
+  const content = (
+    <div
+      className={`rounded-3xl p-6 text-white shadow-xl hover:shadow-2xl 
+                  transition-all duration-500 transform hover:-translate-y-2 
+                  ${color} overflow-hidden relative cursor-pointer`}
+    >
       <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
-      
-      <div className="text-md font-medium text-white/90 mb-2 relative z-10">{title}</div>
+
+      <div className="text-md font-medium text-white/90 mb-2 relative z-10">
+        {title}
+      </div>
+
       <div className="mt-3 flex items-baseline justify-between relative z-10">
         <div className="text-4xl font-extrabold">{value}</div>
         {hint && (
@@ -277,12 +259,26 @@ function CardKPI({ title, value, hint, color, darkMode }) {
           </div>
         )}
       </div>
-      
+
       <div className="absolute bottom-4 right-4 opacity-20">
-        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        <svg
+          className="w-12 h-12"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          />
         </svg>
       </div>
     </div>
-   );
+  );
+
+  // 🔗 Si la prop "to" est définie, on rend la carte cliquable
+  return to ? <Link to={to}>{content}</Link> : content;
 }

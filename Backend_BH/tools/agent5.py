@@ -142,7 +142,6 @@ def get_recommendations(client_ref):
     base_url="http://localhost:11434",
 )"""
     # Génération du token
-    client_ref="11152"
     
     # Prompt
     prompt = [
@@ -165,7 +164,7 @@ def get_recommendations(client_ref):
             "3. Appeler le tool de search_tool pour obtenir la liste des produits a recommander."
             "4. Sélectionner le produit final de la liste fournie par le tool search_tool en tenant compte du raisonnement et il faut que les caratéristiques du client respectent les exigences et les conditions du produit (je n'accepte pas un produit qui ne respecte pas les conditions du contrat) exempple un produit ou l'age n'accepte pas plus de 40 ans ... ."
             "-si vous ne trouvez pas un produit adapté, répondez honnêtement que vous ne pouvez pas recommander de produit. et stoppez l'exécution."
-            "5. Construire un pitch personnalisé (au minimium 100 mots) convaincant sous forme d'un email ( je n'accepte pas autre forme que d'un email ) pour envoyer il faut qui est personnalisé et capable a convaincre le client du le produit choisi ."
+            "5. Construire un pitch personnalisé (au minimium 100 mots) convaincant sous forme d'un email ( je n'accepte pas autre forme que d'un email ) pour envoyer il faut qui est personnalisé et capable a convaincre le client du le produit choisi et n'ajoutez pas des informations n'existe pas pour ce produit."
             "Si un problème survient, arrêter l'exécution et retourner un message d'erreur."
             "Le résultat final doit etre sous Format de réponse attendu (en JSON) je n'accepte pas autre forme que :\n"
                 "{\n"

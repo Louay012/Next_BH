@@ -17,10 +17,15 @@
                 <input type="text" id="ref_client" name="ref_client" 
                        placeholder="Entrez la référence client" 
                        class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
-                    Obtenir la recommandation
-                </button>
+    <button
+    type="submit"
+    class="px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-300
+           hover:scale-110 hover:shadow-[0_0_15px_rgba(99,102,241,0.7)]
+           bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
+>
+    Obtenir la recommandation
+</button>
+
             </form>
         </div>
         
@@ -79,10 +84,36 @@
                     <div id="reasoning" class="prose max-w-none"></div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-xl font-semibold text-blue-800 mb-4">Pitch Commercial</h2>
-                    <div id="pitch" class="prose max-w-none"></div>
-                </div>
+                <div class="bg-white rounded-lg shadow-md p-6" x-data="pitchComponent()">
+    <h2 class="text-xl font-semibold text-blue-800 mb-4">Pitch Commercial</h2>
+
+    <!-- Contenu éditable -->
+    <div id="pitch" class="prose max-w-none" x-show="!isEditing" x-text="content"></div>
+    <textarea x-show="isEditing" x-model="content" class="w-full p-4 border rounded-lg min-h-[100px]"></textarea>
+
+    <!-- Boutons -->
+    <div class="mt-4 flex gap-3">
+        <button 
+            class="px-4 py-2 rounded-xl bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+            @click="toggleEdit"
+        >
+            <span x-text="isEditing ? 'Annuler' : 'Modifier'"></span>
+        </button>
+
+        <button 
+            class="px-4 py-2 rounded-xl bg-green-500 text-white font-semibold hover:bg-green-600 transition"
+            @click="sendPitch"
+            :disabled="!content"
+        >
+            Envoyer
+        </button>
+    </div>
+
+    <!-- Message de confirmation -->
+    <template x-if="successMessage">
+        <div class="alert success mt-3" x-text="successMessage"></div>
+    </template>
+</div>
             </div>
             
             <!-- Conditions Générales -->
