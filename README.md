@@ -159,6 +159,4 @@ Developed for the **NEXT by BH Assurance** challenge as an AI-driven assistant f
 
 https://github.com/user-attachments/assets/4e03472c-431e-4c23-9e10-260c04715a27
 
-Demo:
 
-https://github.com/user-attachments/assets/4e03472c-431e-4c23-9e10-260c04715a27
